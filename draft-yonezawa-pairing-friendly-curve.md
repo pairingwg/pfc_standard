@@ -15,7 +15,7 @@ pi:
     toc: yes
     tocdepth: 4
     sortrefs: yes
-    symrefs : yes
+    symrefs : no
     text-list-symbols: -o*+
 
 author:
