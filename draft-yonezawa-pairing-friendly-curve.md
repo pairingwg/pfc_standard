@@ -2,8 +2,8 @@
 coding: utf-8
 
 title: Pairing-Friendly Curves
-docname: draft-yonezawa-pairing-friendly-curves-00
-date: 2019-01-28
+docname: draft-yonezawa-pairing-friendly-curves-01
+date: 
 
 ipr: trust200902
 area: Networking
@@ -15,7 +15,7 @@ pi:
     toc: yes
     tocdepth: 4
     sortrefs: yes
-    symrefs : yes
+    symrefs: no
     text-list-symbols: -o*+
 
 author:
@@ -78,7 +78,7 @@ informative:
         title: "M-Pin: A Multi-Factor Zero Knowledge Authentication Protocol"
         author:
             ins: "M. Scott"
-        date:
+        date: ""
     TPM:
         target: https://trustedcomputinggroup.org/resource/tpm-library-specification/
         title: Trusted Platform Module Library Specification, Family \“2.0\”, Level 00, Revision 01.38
@@ -206,7 +206,7 @@ informative:
         title: package bn256
         author:
             org: Cloudflare
-        date:
+        date: ""
     go-bls:
         target: https://godoc.org/github.com/prysmaticlabs/go-bls
         title: "go-bls - Go wrapper for a BLS12-381 Signature Aggregation implementation in C++"
@@ -316,8 +316,7 @@ Let p > 3 be a prime and F_p be a finite field.
 The curve defined by the following equation E is called an elliptic curve.
 
        E : y^2 = x^3 + A * x + B,
-
-where A, B are in F_p and satisfies 4 * A^3 + 27 * B^2 != 0 mod p.
+       where A, B are in F_p and satisfies 4 * A^3 + 27 * B^2 != 0 mod p.
 
 Solutions (x, y) for an elliptic curve E, as well as the point at infinity, O_E, 
 are called F_p-rational points.
@@ -341,7 +340,7 @@ h:
 k: 
 : an embedding degree, a minimum integer such that r is a divisor of p^k - 1.
 
-## Pairing
+## Pairing {#pairing}
 
 Pairing is a kind of the bilinear map defined over an elliptic curve.
 Examples include Weil pairing, Tate pairing, optimal Ate pairing {{o-pairing}} and so on.
@@ -436,7 +435,7 @@ We follow TLS 1.3 which specifies the cipher suites with 128 bits and 256 bits o
 
 Implementors of the applications have to choose the parameters with appropriate security level according to the security requirements of the applications.
 For efficiency, we refer to the benchmark by mcl {{mcl}} for 128 bits of security, and by Kiyomura et al. {{Kiy}} for 256 bits of security and choose sufficiently efficient parameters.
-For global acceptance, we give the implementations of pairing-friendly curves in section {{impl}}.
+For global acceptance, we give the implementations of pairing-friendly curves in {{impl}}.
 
 
 ## For 100 Bits of Security
@@ -499,6 +498,8 @@ Ethereum 2.0 adopts BLS12-381 (BLS12_381), BN curves with 254 bits of p (CurveFp
 Cryptographic libraries which implement pairings include PBC {{PBC}}, mcl {{mcl}}, RELIC {{relic}}, TEPLA {{TEPLA}}, AMCL {{AMCL}}, Intel IPP {{intel-ipp}} and a library by Kyushu University {{bls48}}.
 
 {{adoption}} shows the adoption of pairing-friendly curves in existing standards, applications and libraries.
+In this table, the curves marked as (\*) indicate that there is no research result on the security evaluation, 
+but that the implementers states that they hold 128 bits of security.
 
 <!-- Something wrong with PBC-->
 
@@ -519,8 +520,6 @@ Cryptographic libraries which implement pairings include PBC {{PBC}}, mcl {{mcl}
 | | Kyushu Univ. | | | BLS48 |
 {: #adoption title="Adoption of Pairing-Friendly Curves"} 
 
-(*) There is no research result on the security evaluation, but the implementers states that they satisfy 128 bits of security.
-
 # Security Considerations
 
 This memo entirely describes the security of pairing-friendly curves, and introduces secure parameters of pairing-friendly curves. We give these parameters in terms of security, efficiency and global acceptance. The parameters for 100, 128 and 256 bits of security are introduced since the security level will different in the requirements of the pairing-based applications.
@@ -536,6 +535,72 @@ The authors would like to thank Akihiro Kato for his significant contribution to
 # Change log
 
 --- back
+
+# Computing Optimal Ate Pairing
+
+Before presenting the computation of optimal Ate pairing e(P, Q) satisfying the properties shown in {{pairing}}, 
+we give subfunctions used for pairing computation.
+
+The following algorithm shows the computation of the line function.
+It takes A = (A\[1\], A\[2\]), B = (B\[1\], B\[2\]) in G_2 and P = ((P\[1\], P\[2\])) in G_1 as input and outputs an element of G_T.
+
+        if (A = B) then
+            l := (3 * A[1]^2) / (2 * A[2]);
+        else if (A = -B) then
+            return P[1] - A[1];
+        else
+            l := (B[2] - A[2]) / (B[1] - A[1]);
+        end if;
+        return (l * (P[1] -A[1]) + A[2] -P[2]);
+
+When implementing the line function, implementer should consider the isomorphism of E and its twisted curve E' so that one can reduce the computational cost of operations in G_2. We note that the function Line_function does not consider such isomorphism.
+
+Computation of optimal Ate pairing for BN curves uses Frobenius map.
+Let a Frobenius map pi for a point Q = (x, y) over E' be pi(p, Q) = (x^p, y^p).
+
+## Optimal Ate Pairings over Barreto-Naehrig Curves
+
+Let s = 6u + 2 for a parameter u and s_0, s_1, ... , s_l in {-1,0,1} such that the sum of s_i * 2^i (i = 0, 1, ..., L) equals to s.
+
+The following algorithm shows the computation of optimal Ate pairing over Barreto-Naehrig curves.
+It takes P in G_1, Q in G_2, an integer s, s_0, ...,s_L in {-1,0,1} such that the sum of s_i * 2^i (i = 0, 1, ..., L) equals to s, and an order r as input, and outputs e(P, Q).
+
+        f := 1; T := Q;
+        if (s_L = -1)
+            T := -T;
+        end if
+        for i = L-1 to 0
+            f := f^2 * Line_function(T, T, P); T := 2 * T;
+            if (s_i = 1 | s_i = -1)
+                f := f * Line_function(T, s_i * Q); T := T + s_i * Q;
+            end if
+        end for
+        Q_1 := pi(p, Q); Q_2 := pi(p, Q_1);
+        f := f * Line_function(T, Q_1, P); T := T + Q_1;
+        f := f * Line_function(T, -Q_2, P);
+        f := f^{(p^k - 1) / r}
+        return f;
+
+## Optimal Ate Pairings over Barreto-Lynn-Scott Curves
+
+Let u_0, u_1, ... , u_l in {-1,0,1} be a sign-digit representation of a parameter u 
+such that the sum of u_i * 2^i (i = 0, 1, ..., L) equals to u.
+The following algorithm shows the computation of optimal Ate pairing over Barreto-Naehrig curves.
+It takes P in G_1, Q in G_2, a parameter u, u_0, u_1, ..., u_L in {-1,0,1} such that the sum of u_i * 2^i (i = 0, 1, ..., L), 
+and an order r as input, and outputs e(P, Q).
+
+        f := 1; T := Q;
+        if (u_L = -1)
+            T := -T;
+        end if
+        for i = L-1 to 0
+            f := f^2 * Line_function(T, T, P); T := 2 * T;
+            if (u_i = 1 | u_i = -1)
+                f := f * Line_function(T, s_i * Q, P); T := T + s_i * Q;
+            end if
+        end for
+        f := f^{(p^k - 1) / r};
+        retern f;
 
 # Test Vectors of Optimal Ate Pairing
 
