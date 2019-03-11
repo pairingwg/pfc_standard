@@ -96,7 +96,7 @@ informative:
             month: July
     W3C: 
         target: https://www.w3.org/TR/webauthn/
-        title: "Web Authentication: An API for accessing Public Key Credentials Level 1 - W3C Candidate Recommendation"
+        title: "Web Authentication: An API for accessing Public Key Credentials Level 1 - W3C Recommendation"
         author: 
             ins: "D. Balfanz"
         author: 
@@ -116,8 +116,8 @@ informative:
         author: 
             ins: "E. Lundberg"
         date:
-            year: 2018
-            month: July
+            year: 2019
+            month: March
     zcash:
         target: https://z.cash/technology/zksnarks.html
         title: What are zk-SNARKs?
@@ -179,6 +179,7 @@ informative:
     Pollard78: DOI.10.1090/S0025-5718-1978-0491431-9
     IndexCalculus: DOI.10.1007/978-1-4757-0602-4_1
     subgroup: DOI.10.1007/978-3-319-22174-8_14
+    RFC8446:
     mcl:
         target: https://github.com/herumi/mcl
         title: mcl - A portable and fast pairing-based cryptography library
@@ -310,7 +311,7 @@ Cloudflare introduced Geo Key Manager {{cloudflare}} to restrict distribution of
 
 Recently, Boneh-Lynn-Shacham (BLS) signature schemes are being standardized 
 {{I-D.boneh-bls-signature}} and utilized in several blockchain projects 
-such as Ethereum {{ethereum}}, Algorand {{Algorand}}, Chia Network {Chia} and DFINITY {{DFINITY}}. 
+such as Ethereum {{ethereum}}, Algorand {{Algorand}}, Chia Network {{Chia}} and DFINITY {{DFINITY}}. 
 The threshold functionality and aggregation functionality of BLS signatures are effective for their applications of decentralization and scalability.
 
 ## Goal
@@ -323,7 +324,7 @@ We show how to evaluate the security of pairing-friendly curves and give the par
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  
 "MAY", and "OPTIONAL" in this document are to be interpreted as described in {{RFC2119}}.
 
-# Preliiminaries
+# Preliminaries
 
 ## Elliptic Curve
 
@@ -331,7 +332,8 @@ Let p > 3 be a prime and F\_p be a finite field.
 The curve defined by the following equation E is called an elliptic curve.
 
        E : y^2 = x^3 + A * x + B,
-       where A, B are in F\_p and satisfies 4 * A^3 + 27 * B^2 != 0 mod p.
+
+where A, B are in F\_p and satisfies 4 * A^3 + 27 * B^2 != 0 mod p.
 
 Solutions (x, y) for an elliptic curve E, as well as the point at infinity, O\_E, 
 are called F\_p-rational points.
@@ -378,16 +380,10 @@ A BN curve {{BN05}} is one of the instantiations of pairing-friendly curves prop
 
 A BN curve is an elliptic curve E defined over a finite field F\_p, where p is more than or equal to 5, such that p and its order r are prime numbers parameterized by
 
-        p = 36t^4 + 36t^3 + 24t^2 + 6t + 1
-        r = 36t^4 + 36t^3 + 18t^2 + 6t + 1
+        p = 36 * t^4 + 36 * t^3 + 24 * t^2 + 6 * t + 1
+        r = 36 * t^4 + 36 * t^3 + 18 * t^2 + 6 * t + 1
 
 for some well chosen integer t. The elliptic curve has an equation of the form E: y^2 = x^3 + b, where b is an element of multiplicative group of order p.
-
-For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
-
-        F\_p2 = F\_p[u] / (u^2 + 1)
-        F\_p6 = F\_p2[v] / (v^3 - u - 2)
-        F\_p12 = F\_p6[w] / (w^2 - v).
 
 BN curves always have order 6 twists. If m is an element which is neither a square nor a cube in a finite field F\_p2, the twisted curve E' of E is defined over a finite field F\_p2 by the equation E': y^2 = x^3 + b' with b' = b / m or b' = b \* m. The embedded degree k is 12.
 
@@ -398,12 +394,6 @@ A pairing e is defined by taking G\_1 as a cyclic group composed by rational poi
 A BLS curve {{BLS02}} is another instantiations of pairings proposed in 2002. Similar to BN curves, a pairing over BLS curves constructs optimal Ate pairings.
 
 A BLS curve is an elliptic curve E defined over a finite field F\_p by an equation of the form E: y^2 = x^3 + b and has a twist of order 6 defined in the same way as BN curves. In contrast to BN curves, a BLS curve does not have a prime order but its order is divisible by a large parameterized prime r and the pairing will be defined on the r-torsions points.
-
-For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
-
-        F\_p2 = F\_p[u] / (u^2 + 1)
-        F\_p6 = F\_p2[v] / (v^3 - u - 1)
-        F\_p12 = F\_p6[w] / (w^2 - v).
 
 BLS curves vary according to different embedding degrees. In this memo, we deal with BLS12 and BLS48 families with embedding degrees 12 and 48 with respect to r, respectively.
 
@@ -425,7 +415,7 @@ In order to encode an element of an extension field,
 we adopt the convention shown in {{IEEE-1363a-2004}}.
 
 For an element s of an extension field of degree d 
-such that s = s_0 + s_1 * i + s_2 * i^2 + ... + s_{d-1} * i^{d-1} for an indeterminant i, 
+such that s = s\_0 + s\_1 \* i + s\_2 \* i^2 + ... + s\_{d-1} \* i^{d-1} for an indeterminant i, 
 s is represented by
 
         s = s_0 + s_1 * p + s_2 * p^2 + ... + s_{d-1} * p^{d-1}.
@@ -473,9 +463,9 @@ The parameters introduced here are chosen with the consideration of security, ef
 For security, we introduce 100 bits, 128 bits and 256 bits of security.
 We note that 100 bits of security is no longer secure
 and recommend 128 bits and 256 bits of security for secure applications.
-We follow TLS 1.3 which specifies the cipher suites with 128 bits and 256 bits of security as mandatory-to-implement for the choice of the security level.
+We follow TLS 1.3 {{RFC8446}} which specifies the cipher suites with 128 bits and 256 bits of security as mandatory-to-implement for the choice of the security level.
 
-Implementors of the applications have to choose the parameters with appropriate security level according to the security requirements of the applications.
+implementers of the applications have to choose the parameters with appropriate security level according to the security requirements of the applications.
 For efficiency, we refer to the benchmark by mcl {{mcl}} for 128 bits of security, and by Kiyomura et al. {{Kiy}} for 256 bits of security and choose sufficiently efficient parameters.
 For global acceptance, we give the implementations of pairing-friendly curves in {{impl}}.
 
@@ -484,16 +474,22 @@ For global acceptance, we give the implementations of pairing-friendly curves in
 
 Before exTNFS, BN curves with 256-bit size of underlying finite field (so-called BN256) were considered to have 128 bits of security. After exTNFS, however, the security level of BN curves with 256-bit size of underlying finite field fell into 100 bits.
 
-Implementors who will newly develop the applications of pairing-based cryptography SHOULD NOT use BN256 as a pairing-friendly curve when their applications require 128 bits of security.
-In case an application does not require higher security level and is sufficient to have 100 bits of security (i.e. IoT), implementors MAY use BN256.
+implementers who will newly develop the applications of pairing-based cryptography SHOULD NOT use BN256 as a pairing-friendly curve when their applications require 128 bits of security.
+In case an application does not require higher security level and is sufficient to have 100 bits of security (i.e. Internet of Things), implementers MAY use BN256.
 
 ## For 128 Bits of Security
 
 A BN curve with 128 bits of security is shown in {{BD18}}, which we call BN462. BN462 is defined by a parameter t = 2^114 + 2^101 - 2^14 - 1 for the definition in {{BNdef}}. Defined by t, the elliptic curve E and its twisted curve E' are represented by E: y^2 = x^3 + 5 and E': y^2 = x^3 - u + 2, where u is an element of an extension field F\_p^2, respectively. The size of p becomes 462-bit length. 
 
+For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
+
+        F_p2 = F_p[u] / (u^2 + 1)
+        F_p6 = F_p2[v] / (v^3 - u - 2)
+        F_p12 = F_p6[w] / (w^2 - v).
+
 As the parameters for BN462, we give a characteristic p, an order r, a base point G = (x, y), 
 a cofactor h of an elliptic curve E: y^2 = x^3 + b, 
-and an order r', a base point G' = (x', y'), a cofactor h' of an elliptic curve E': y-2 = x^3 + b'.
+and an order r', a base point G' = (x', y'), a cofactor h' of an elliptic curve E': y^2 = x^3 + b'.
 
 p:
 : 0x2404 80360120 023fffff fffff6ff 0cf6b7d9 bfca0000 000000d8 
@@ -555,6 +551,12 @@ Defined by t, the elliptic curve E and its twisted curve E' are represented
 by E: y^2 = x^3 + 4 and E': y^2 = x^3 + 4(u + 1), 
 where u is an element of an extension field F\_p^2, respectively.
 
+For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
+
+        F_p2 = F_p[u] / (u^2 + 1)
+        F_p6 = F_p2[v] / (v^3 - u - 1)
+        F_p12 = F_p6[w] / (w^2 - v).
+
 We have to note that, according to {{MSS17}}, the bit length of p for BLS12 to achieve 128 bits of security is calculated as 384 bits and more, which BLS12-381 does not satisfy. Although the computational time is conservatively estimated by 2^110 when exTNFS is applied with index calculus, there is no currently published efficient method for such computational time. They state that BLS12-381 achieves 127-bit security level evaluated by the computational cost of Pollard's rho. Therefore, we regard BN462 as a \"conservative\" parameter, and BLS12-381 as an \"optimistic\" parameter.
 
 We give the parameters for BLS12-381 as follows.
@@ -603,7 +605,7 @@ h':
   cf1c38e3 1c7238e5
 
 b':
-: 4 \* (i + 1)
+: 4 \* (u + 1)
 
 ## For 256 Bits of Security
 
@@ -617,6 +619,14 @@ and the elliptic curve E and its twisted curve E' are represented by E: y^2 = x^
 and E': y^2 = x^3 - 1 / w, 
 where w is an element of an extension field F\_p^8.
 The size of p becomes 581-bit length.
+
+For the finite field F\_p, the towers of extension field F\_p2, F\_p4, F\_p8, F\_p24 and F\_p48 are defined by indeterminants u, v, w, z, s as follows:
+
+        F_p2 = F_p[u] / (u^2 + 1)
+        F_p4 = F_p2[v] / (v^2 + u + 1)
+        F_p8 = F_p4[w] / (w^2 + v)
+        F_p24 = F_p8[z] / (z^3 + w)
+        F_p48 = Fp24[s] / (s^2 + z)
 
 We then give the parameters for BLS48-581 as follows.
 
@@ -743,7 +753,7 @@ and publish its experimental implementation {{zkcrypto}}.
 Cloudflare implements a 256-bit BN curve (bn256) {{cloudflare-bn256}}.
 There is no action so far after exTNFS.
 
-Ethereum 2.0 adopts BLS12-381 (BLS12\_381), BN curves with 254 bits of p (CurveFp254BNb) and 382 bits of p (CurveFp382\_1 and CurveFp382\_2) {{go-bls}}. Their implementation calls mcl {{mcl}} for pairing computation.
+Ethereum 2.0 adopts BLS12-381 (BLS12\_381), BN curves with 254 bits of p (CurveFp254BNb) and 382 bits of p (CurveFp382\_1 and CurveFp382\_2) {{go-bls}}. Their implementation calls mcl {{mcl}} for pairing computation. Chia Network publishs their implementation {{Chia}} by integrating the RELIC toolkit {{relic}}.
 
 <!-- libraries -->
 
@@ -754,16 +764,17 @@ In this table, the curves marked as (\*) indicate that there is no research resu
 but that the implementers states that they hold 128 bits of security.
 
 | Category | Name | 100 bit | 128 bit | 256 bit |
-| standards | ISO/IEC {{ISOIEC15946-5}} | BN256 | BN384 | |
+| standards | ISO/IEC 15946-5 | BN256 | BN384 | |
 | | TCG | BN256 | | |
 | | FIDO/W3C | BN256 | | |
 | applications | MIRACL | BN254 | BLS12 | |
 | | Zcash | BN128 (CurveSNARK) | BLS12-381 | |
 | | Cloudflare | BN256 | | |
 | | Ethereum | BN254 | BN382 (\*) / BLS12-381 (\*)  | |
+| | Chia Network | | BLS12-381 (\*)  | |
 | libraries | PBC | BN | | |
 | | mcl | BN254 / BN_SNARK1 | BN381_1 (\*) / BN462 / BLS12-381 | |
-| | RELIC {{relic}} | BN254 / BN256 | BLS12-381 / BLS12-455 | |
+| | RELIC | BN254 / BN256 | BLS12-381 / BLS12-455 | |
 | | TEPLA | BN254 | | |
 | | AMCL | BN254 / BN256 | BLS12-381 (\*) / BLS12-383 (\*) / BLS12-461 | BLS48 |
 | | Intel IPP  | BN256 | | |
@@ -782,7 +793,7 @@ This document has no actions for IANA.
 
 The authors would like to thank Akihiro Kato for his significant contribution to the early version of this memo.
 
-# Change log
+<!-- # Change log -->
 
 --- back
 
@@ -852,7 +863,7 @@ and an order r as input, and outputs e(P, Q).
             end if
         end for
         f := f^{(p^k - 1) / r};
-        retern f;
+        return f;
 
 # Test Vectors of Optimal Ate Pairing
 

@@ -69,27 +69,26 @@ Table of Contents
      1.2.  Applications of Pairing-Based Cryptography  . . . . . . .   3
      1.3.  Goal  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
      1.4.  Requirements Terminology  . . . . . . . . . . . . . . . .   4
-   2.  Preliiminaries  . . . . . . . . . . . . . . . . . . . . . . .   4
+   2.  Preliminaries . . . . . . . . . . . . . . . . . . . . . . . .   4
      2.1.  Elliptic Curve  . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Pairing . . . . . . . . . . . . . . . . . . . . . . . . .   5
      2.3.  Barreto-Naehrig Curve . . . . . . . . . . . . . . . . . .   5
      2.4.  Barreto-Lynn-Scott Curve  . . . . . . . . . . . . . . . .   6
-     2.5.  Representation Convention for an Extension Field  . . . .   7
+     2.5.  Representation Convention for an Extension Field  . . . .   6
    3.  Security of Pairing-Friendly Curves . . . . . . . . . . . . .   7
      3.1.  Evaluating the Security of Pairing-Friendly Curves  . . .   7
      3.2.  Impact of the Recent Attack . . . . . . . . . . . . . . .   8
    4.  Security Evaluation of Pairing-Friendly Curves  . . . . . . .   8
-     4.1.  For 100 Bits of Security  . . . . . . . . . . . . . . . .   9
+     4.1.  For 100 Bits of Security  . . . . . . . . . . . . . . . .   8
      4.2.  For 128 Bits of Security  . . . . . . . . . . . . . . . .   9
-     4.3.  For 256 Bits of Security  . . . . . . . . . . . . . . . .  12
+     4.3.  For 256 Bits of Security  . . . . . . . . . . . . . . . .  11
    5.  Implementations of Pairing-Friendly Curves  . . . . . . . . .  14
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
    8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  16
-   9.  Change log  . . . . . . . . . . . . . . . . . . . . . . . . .  16
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  16
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  17
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  16
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  17
    Appendix A.  Computing Optimal Ate Pairing  . . . . . . . . . . .  20
      A.1.  Optimal Ate Pairings over Barreto-Naehrig Curves  . . . .  21
      A.2.  Optimal Ate Pairings over Barreto-Lynn-Scott Curves . . .  22
@@ -106,6 +105,7 @@ Table of Contents
 
    Pairing-based cryptography, a variant of elliptic curve cryptography,
    is attracted the attention for its flexible and applicable
+   functionality.  Pairing is a special map defined over elliptic
 
 
 
@@ -114,7 +114,6 @@ Yonezawa, et al.       Expires September 12, 2019               [Page 2]
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
 
-   functionality.  Pairing is a special map defined over elliptic
    curves.  As the importance of pairing grows, elliptic curves where
    pairing is efficiently computable are studied and the special curves
    called pairing-friendly curves are proposed.
@@ -161,7 +160,8 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
 
    Cloudflare introduced Geo Key Manager [23] to restrict distribution
    of customers' private keys to the subset of their data centers.  To
-
+   achieve this functionality, attribute-based encryption is used and
+   pairing takes a role as a building block.
 
 
 
@@ -170,12 +170,9 @@ Yonezawa, et al.       Expires September 12, 2019               [Page 3]
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
 
-   achieve this functionality, attribute-based encryption is used and
-   pairing takes a role as a building block.
-
    Recently, Boneh-Lynn-Shacham (BLS) signature schemes are being
    standardized [24] and utilized in several blockchain projects such as
-   Ethereum [25], Algorand [26], Chia Network {Chia} and DFINITY [28].
+   Ethereum [25], Algorand [26], Chia Network [27] and DFINITY [28].
    The threshold functionality and aggregation functionality of BLS
    signatures are effective for their applications of decentralization
    and scalability.
@@ -198,15 +195,16 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    "MAY", and "OPTIONAL" in this document are to be interpreted as
    described in [1].
 
-2.  Preliiminaries
+2.  Preliminaries
 
 2.1.  Elliptic Curve
 
    Let p > 3 be a prime and F_p be a finite field.  The curve defined by
    the following equation E is called an elliptic curve.
 
-     E : y^2 = x^3 + A * x + B,
-     where A, B are in F\_p and satisfies 4 * A^3 + 27 * B^2 != 0 mod p.
+      E : y^2 = x^3 + A * x + B,
+
+   where A, B are in F_p and satisfies 4 * A^3 + 27 * B^2 != 0 mod p.
 
    Solutions (x, y) for an elliptic curve E, as well as the point at
    infinity, O_E, are called F_p-rational points.  If P and Q are two
@@ -217,6 +215,8 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    rational points.  Similarly, a scalar multiplication S = [a]P for a
    positive integer a can be defined as an a-time addition of P.
 
+   Typically, the cyclic additive group with a prime order r and the
+   base point G in its group is used for the elliptic curve
 
 
 
@@ -226,8 +226,6 @@ Yonezawa, et al.       Expires September 12, 2019               [Page 4]
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
 
-   Typically, the cyclic additive group with a prime order r and the
-   base point G in its group is used for the elliptic curve
    cryptography.  Furthermore, we define terminology used in this memo
    as follows.
 
@@ -274,6 +272,8 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    where p is more than or equal to 5, such that p and its order r are
    prime numbers parameterized by
 
+       p = 36 * t^4 + 36 * t^3 + 24 * t^2 + 6 * t + 1
+       r = 36 * t^4 + 36 * t^3 + 18 * t^2 + 6 * t + 1
 
 
 
@@ -282,19 +282,9 @@ Yonezawa, et al.       Expires September 12, 2019               [Page 5]
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
 
-       p = 36t^4 + 36t^3 + 24t^2 + 6t + 1
-       r = 36t^4 + 36t^3 + 18t^2 + 6t + 1
-
    for some well chosen integer t.  The elliptic curve has an equation
    of the form E: y^2 = x^3 + b, where b is an element of multiplicative
    group of order p.
-
-   For the finite field F_p, the towers of extension field F_p2, F_p6
-   and F_p12 are defined by indeterminants u, v, w as follows:
-
-       F\_p2 = F\_p[u] / (u^2 + 1)
-       F\_p6 = F\_p2[v] / (v^3 - u - 2)
-       F\_p12 = F\_p6[w] / (w^2 - v).
 
    BN curves always have order 6 twists.  If m is an element which is
    neither a square nor a cube in a finite field F_p2, the twisted curve
@@ -319,24 +309,9 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    large parameterized prime r and the pairing will be defined on the
    r-torsions points.
 
-   For the finite field F_p, the towers of extension field F_p2, F_p6
-   and F_p12 are defined by indeterminants u, v, w as follows:
-
-       F\_p2 = F\_p[u] / (u^2 + 1)
-       F\_p6 = F\_p2[v] / (v^3 - u - 1)
-       F\_p12 = F\_p6[w] / (w^2 - v).
-
    BLS curves vary according to different embedding degrees.  In this
    memo, we deal with BLS12 and BLS48 families with embedding degrees 12
    and 48 with respect to r, respectively.
-
-
-
-
-Yonezawa, et al.       Expires September 12, 2019               [Page 6]
-
-Internet-Draft           Pairing-Friendly Curves              March 2019
-
 
    In BLS curves, parameterized p and r are given by the following
    equations:
@@ -355,6 +330,13 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    Pairing-friendly curves uses some extension fields.  In order to
    encode an element of an extension field, we adopt the convention
    shown in [29].
+
+
+
+Yonezawa, et al.       Expires September 12, 2019               [Page 6]
+
+Internet-Draft           Pairing-Friendly Curves              March 2019
+
 
    For an element s of an extension field of degree d such that s = s_0
    + s_1 * i + s_2 * i^2 + ... + s_{d-1} * i^{d-1} for an indeterminant
@@ -386,14 +368,6 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    problems described above and believed to be easier than the discrete
    logarithm problems.
 
-
-
-
-Yonezawa, et al.       Expires September 12, 2019               [Page 7]
-
-Internet-Draft           Pairing-Friendly Curves              March 2019
-
-
    There would be the case where the attacker solves these reduced
    problems to break the pairing-based cryptography.  Since such attacks
    have not been discovered yet, we discuss the hardness of the discrete
@@ -412,6 +386,13 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    logarithm problem can be efficiently solved.  One has to choose
    parameters so that the cofactors of G_1, G_2 and G_T contain no prime
    factors smaller than |G_1|, |G_2| and |G_T|.
+
+
+
+Yonezawa, et al.       Expires September 12, 2019               [Page 7]
+
+Internet-Draft           Pairing-Friendly Curves              March 2019
+
 
 3.2.  Impact of the Recent Attack
 
@@ -441,6 +422,25 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    parameters introduced here are chosen with the consideration of
    security, efficiency and global acceptance.
 
+   For security, we introduce 100 bits, 128 bits and 256 bits of
+   security.  We note that 100 bits of security is no longer secure and
+   recommend 128 bits and 256 bits of security for secure applications.
+   We follow TLS 1.3 [34] which specifies the cipher suites with 128
+   bits and 256 bits of security as mandatory-to-implement for the
+   choice of the security level.
+
+   implementers of the applications have to choose the parameters with
+   appropriate security level according to the security requirements of
+   the applications.  For efficiency, we refer to the benchmark by mcl
+   [35] for 128 bits of security, and by Kiyomura et al. [8] for 256
+   bits of security and choose sufficiently efficient parameters.  For
+   global acceptance, we give the implementations of pairing-friendly
+   curves in Section 5.
+
+4.1.  For 100 Bits of Security
+
+   Before exTNFS, BN curves with 256-bit size of underlying finite field
+   (so-called BN256) were considered to have 128 bits of security.
 
 
 
@@ -450,33 +450,15 @@ Yonezawa, et al.       Expires September 12, 2019               [Page 8]
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
 
-   For security, we introduce 100 bits, 128 bits and 256 bits of
-   security.  We note that 100 bits of security is no longer secure and
-   recommend 128 bits and 256 bits of security for secure applications.
-   We follow TLS 1.3 which specifies the cipher suites with 128 bits and
-   256 bits of security as mandatory-to-implement for the choice of the
-   security level.
-
-   Implementors of the applications have to choose the parameters with
-   appropriate security level according to the security requirements of
-   the applications.  For efficiency, we refer to the benchmark by mcl
-   [34] for 128 bits of security, and by Kiyomura et al. [8] for 256
-   bits of security and choose sufficiently efficient parameters.  For
-   global acceptance, we give the implementations of pairing-friendly
-   curves in Section 5.
-
-4.1.  For 100 Bits of Security
-
-   Before exTNFS, BN curves with 256-bit size of underlying finite field
-   (so-called BN256) were considered to have 128 bits of security.
    After exTNFS, however, the security level of BN curves with 256-bit
    size of underlying finite field fell into 100 bits.
 
-   Implementors who will newly develop the applications of pairing-based
+   implementers who will newly develop the applications of pairing-based
    cryptography SHOULD NOT use BN256 as a pairing-friendly curve when
    their applications require 128 bits of security.  In case an
    application does not require higher security level and is sufficient
-   to have 100 bits of security (i.e.  IoT), implementors MAY use BN256.
+   to have 100 bits of security (i.e.  Internet of Things), implementers
+   MAY use BN256.
 
 4.2.  For 128 Bits of Security
 
@@ -487,24 +469,21 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    E': y^2 = x^3 - u + 2, where u is an element of an extension field
    F_p^2, respectively.  The size of p becomes 462-bit length.
 
+   For the finite field F_p, the towers of extension field F_p2, F_p6
+   and F_p12 are defined by indeterminants u, v, w as follows:
+
+       F_p2 = F_p[u] / (u^2 + 1)
+       F_p6 = F_p2[v] / (v^3 - u - 2)
+       F_p12 = F_p6[w] / (w^2 - v).
+
    As the parameters for BN462, we give a characteristic p, an order r,
    a base point G = (x, y), a cofactor h of an elliptic curve E: y^2 =
    x^3 + b, and an order r', a base point G' = (x', y'), a cofactor h'
-   of an elliptic curve E': y-2 = x^3 + b'.
+   of an elliptic curve E': y^2 = x^3 + b'.
 
    p: 0x2404 80360120 023fffff fffff6ff 0cf6b7d9 bfca0000 000000d8
       12908f41 c8020fff fffffff6 ff66fc6f f687f640 00000000 2401b008
       40138013
-
-
-
-
-
-
-Yonezawa, et al.       Expires September 12, 2019               [Page 9]
-
-Internet-Draft           Pairing-Friendly Curves              March 2019
-
 
    r: 0x2404 80360120 023fffff fffff6ff 0cf6b7d9 bfca0000 000000d8
       12908ee1 c201f7ff fffffff6 ff66fc7b f717f7c0 00000000 2401b007
@@ -519,6 +498,13 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
       36fb03de
 
    h: 1
+
+
+
+Yonezawa, et al.       Expires September 12, 2019               [Page 9]
+
+Internet-Draft           Pairing-Friendly Curves              March 2019
+
 
    b: 5
 
@@ -544,16 +530,30 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
 
    b':  -u + 2
 
-   A BLS12 curve with 128 bits of security shown in [35], BLS12-381, is
+   A BLS12 curve with 128 bits of security shown in [36], BLS12-381, is
    defined by a parameter t = -2^63 - 2^62 - 2^60 - 2^57 - 2^48 - 2^16
    and the size of p becomes 381-bit length.  Defined by t, the elliptic
    curve E and its twisted curve E' are represented by E: y^2 = x^3 + 4
    and E': y^2 = x^3 + 4(u + 1), where u is an element of an extension
    field F_p^2, respectively.
 
+   For the finite field F_p, the towers of extension field F_p2, F_p6
+   and F_p12 are defined by indeterminants u, v, w as follows:
+
+       F_p2 = F_p[u] / (u^2 + 1)
+       F_p6 = F_p2[v] / (v^3 - u - 1)
+       F_p12 = F_p6[w] / (w^2 - v).
+
    We have to note that, according to [7], the bit length of p for BLS12
    to achieve 128 bits of security is calculated as 384 bits and more,
    which BLS12-381 does not satisfy.  Although the computational time is
+   conservatively estimated by 2^110 when exTNFS is applied with index
+   calculus, there is no currently published efficient method for such
+   computational time.  They state that BLS12-381 achieves 127-bit
+   security level evaluated by the computational cost of Pollard's rho.
+   Therefore, we regard BN462 as a "conservative" parameter, and
+   BLS12-381 as an "optimistic" parameter.
+
 
 
 
@@ -561,13 +561,6 @@ Yonezawa, et al.       Expires September 12, 2019              [Page 10]
 
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
-
-   conservatively estimated by 2^110 when exTNFS is applied with index
-   calculus, there is no currently published efficient method for such
-   computational time.  They state that BLS12-381 achieves 127-bit
-   security level evaluated by the computational cost of Pollard's rho.
-   Therefore, we regard BN462 as a "conservative" parameter, and
-   BLS12-381 as an "optimistic" parameter.
 
    We give the parameters for BLS12-381 as follows.
 
@@ -604,19 +597,7 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
       2e5a7ddf a628f1cb 4d9e82ef 21537e29 3a6691ae 1616ec6e 786f0c70
       cf1c38e3 1c7238e5
 
-   b':  4 * (i + 1)
-
-
-
-
-
-
-
-
-Yonezawa, et al.       Expires September 12, 2019              [Page 11]
-
-Internet-Draft           Pairing-Friendly Curves              March 2019
-
+   b':  4 * (u + 1)
 
 4.3.  For 256 Bits of Security
 
@@ -628,8 +609,27 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    call BLS48-581.  It is defined by a parameter t = -1 + 2^7 - 2^10 -
    2^30 - 2^32 and the elliptic curve E and its twisted curve E' are
    represented by E: y^2 = x^3 + 1 and E': y^2 = x^3 - 1 / w, where w is
+
+
+
+
+Yonezawa, et al.       Expires September 12, 2019              [Page 11]
+
+Internet-Draft           Pairing-Friendly Curves              March 2019
+
+
    an element of an extension field F_p^8.  The size of p becomes
    581-bit length.
+
+   For the finite field F_p, the towers of extension field F_p2, F_p4,
+   F_p8, F_p24 and F_p48 are defined by indeterminants u, v, w, z, s as
+   follows:
+
+       F_p2 = F_p[u] / (u^2 + 1)
+       F_p4 = F_p2[v] / (v^2 + u + 1)
+       F_p8 = F_p4[w] / (w^2 + v)
+       F_p24 = F_p8[z] / (z^3 + w)
+       F_p48 = Fp24[s] / (s^2 + z)
 
    We then give the parameters for BLS48-581 as follows.
 
@@ -744,7 +744,7 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    We show the pairing-friendly curves selected by existing standards,
    applications and cryptographic libraries.
 
-   ISO/IEC 15946-5 [36] shows examples of BN curves with the size of
+   ISO/IEC 15946-5 [37] shows examples of BN curves with the size of
    160, 192, 224, 256, 384 and 512 bits of p.  There is no action so far
    after the proposal of exTNFS.
 
@@ -754,30 +754,30 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    curves specified in TCG, a 512-bit BN curve shown in ISO/IEC 15946-5
    and another 256-bit BN curve.
 
-   MIRACL [37] implements BN curves and BLS12 curves.
+   MIRACL [38] implements BN curves and BLS12 curves.
 
    Zcash implemented a BN curve (named BN128) in their library libsnark
-   [38].  After exTNFS, they propose a new parameter of BLS12 as
-   BLS12-381 [35] and publish its experimental implementation [39].
+   [39].  After exTNFS, they propose a new parameter of BLS12 as
+   BLS12-381 [36] and publish its experimental implementation [40].
 
-   Cloudflare implements a 256-bit BN curve (bn256) [40].  There is no
+   Cloudflare implements a 256-bit BN curve (bn256) [41].  There is no
    action so far after exTNFS.
 
    Ethereum 2.0 adopts BLS12-381 (BLS12_381), BN curves with 254 bits of
    p (CurveFp254BNb) and 382 bits of p (CurveFp382_1 and CurveFp382_2)
-   [41].  Their implementation calls mcl [34] for pairing computation.
+   [42].  Their implementation calls mcl [35] for pairing computation.
+   Chia Network publishs their implementation [27] by integrating the
+   RELIC toolkit [44].
 
-   Cryptographic libraries which implement pairings include PBC [42],
-   mcl [34], RELIC [43], TEPLA [44], AMCL [45], Intel IPP [46] and a
-   library by Kyushu University [47].
+   Cryptographic libraries which implement pairings include PBC [43],
+   mcl [35], RELIC [44], TEPLA [45], AMCL [46], Intel IPP [47] and a
+   library by Kyushu University [48].
 
    Table 1 shows the adoption of pairing-friendly curves in existing
    standards, applications and libraries.  In this table, the curves
    marked as (*) indicate that there is no research result on the
    security evaluation, but that the implementers states that they hold
    128 bits of security.
-
-
 
 
 
@@ -791,7 +791,7 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    |              |            |              |                | bit   |
    +--------------+------------+--------------+----------------+-------+
    | standards    | ISO/IEC    | BN256        | BN384          |       |
-   |              | [36]       |              |                |       |
+   |              | 15946-5    |              |                |       |
    |              |            |              |                |       |
    |              | TCG        | BN256        |                |       |
    |              |            |              |                |       |
@@ -807,13 +807,16 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    |              | Ethereum   | BN254        | BN382 (*) /    |       |
    |              |            |              | BLS12-381 (*)  |       |
    |              |            |              |                |       |
+   |              | Chia       |              | BLS12-381 (*)  |       |
+   |              | Network    |              |                |       |
+   |              |            |              |                |       |
    | libraries    | PBC        | BN           |                |       |
    |              |            |              |                |       |
    |              | mcl        | BN254 /      | BN381_1 (*) /  |       |
    |              |            | BN_SNARK1    | BN462 /        |       |
    |              |            |              | BLS12-381      |       |
    |              |            |              |                |       |
-   |              | RELIC [43] | BN254 /      | BLS12-381 /    |       |
+   |              | RELIC      | BN254 /      | BLS12-381 /    |       |
    |              |            | BN256        | BLS12-455      |       |
    |              |            |              |                |       |
    |              | TEPLA      | BN254        |                |       |
@@ -830,9 +833,6 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    +--------------+------------+--------------+----------------+-------+
 
                Table 1: Adoption of Pairing-Friendly Curves
-
-
-
 
 
 
@@ -860,11 +860,9 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    The authors would like to thank Akihiro Kato for his significant
    contribution to the early version of this memo.
 
-9.  Change log
+9.  References
 
-10.  References
-
-10.1.  Normative References
+9.1.  Normative References
 
    [1]        Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -889,7 +887,9 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
               Advances in Cryptology - CRYPTO 2016 pp. 543-571,
               DOI 10.1007/978-3-662-53018-4_20, 2016.
 
-
+   [6]        Barbulescu, R. and S. Duquesne, "Updating Key Size
+              Estimations for Pairings", Journal of Cryptology,
+              DOI 10.1007/s00145-018-9280-5, January 2018.
 
 
 
@@ -897,10 +897,6 @@ Yonezawa, et al.       Expires September 12, 2019              [Page 16]
 
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
-
-   [6]        Barbulescu, R. and S. Duquesne, "Updating Key Size
-              Estimations for Pairings", Journal of Cryptology,
-              DOI 10.1007/s00145-018-9280-5, January 2018.
 
    [7]        Menezes, A., Sarkar, P., and S. Singh, "Challenges with
               Assessing the Impact of NFS Advances on the Security of
@@ -912,7 +908,7 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
               256-Bit Security Level", Applied Cryptography and Network
               Security pp. 59-79, DOI 10.1007/978-3-319-61204-1_4, 2017.
 
-10.2.  Informative References
+9.2.  Informative References
 
    [9]        Boyen, X. and L. Martin, "Identity-Based Cryptography
               Standard (IBCS) #1: Supersingular Curve Implementations of
@@ -945,6 +941,10 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
               Hellman", Lecture Notes in Computer Science pp. 385-393,
               DOI 10.1007/10722028_23, 2000.
 
+   [16]       Chen, L., Cheng, Z., and N. Smart, "Identity-based key
+              agreement protocols from pairings", International Journal
+              of Information Security Vol. 6, pp. 213-241,
+              DOI 10.1007/s10207-006-0011-9, January 2007.
 
 
 
@@ -953,11 +953,6 @@ Yonezawa, et al.       Expires September 12, 2019              [Page 17]
 
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
-
-   [16]       Chen, L., Cheng, Z., and N. Smart, "Identity-based key
-              agreement protocols from pairings", International Journal
-              of Information Security Vol. 6, pp. 213-241,
-              DOI 10.1007/s10207-006-0011-9, January 2007.
 
    [17]       Fujioka, A., Suzuki, K., and B. Ustao&#287;lu, "Ephemeral
               Key Leakage Resilient and Efficient ID-AKEs That Can Share
@@ -981,8 +976,8 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
               fido-ecdaa-algorithm-v2.0-rd-20180702.html>.
 
    [21]       Lundberg, E., "Web Authentication: An API for accessing
-              Public Key Credentials Level 1 - W3C Candidate
-              Recommendation", <https://www.w3.org/TR/webauthn/>.
+              Public Key Credentials Level 1 - W3C Recommendation",
+              <https://www.w3.org/TR/webauthn/>.
 
    [22]       Lindemann, R., "What are zk-SNARKs?",
               <https://z.cash/technology/zksnarks.html>.
@@ -1000,16 +995,6 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
               ethereum-2-0-development-update-17-prysmatic-labs-
               ed5bcf82ec00>.
 
-
-
-
-
-
-Yonezawa, et al.       Expires September 12, 2019              [Page 18]
-
-Internet-Draft           Pairing-Friendly Curves              March 2019
-
-
    [26]       Gorbunov, S., "Efficient and Secure Digital Signatures for
               Proof-of-Stake Blockchains", <https://medium.com/algorand/
               digital-signatures-for-blockchains-5820e15fbe95>.
@@ -1017,6 +1002,13 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
    [27]       Chia Network, "BLS signatures in C++, using the relic
               toolkit",
               <https://github.com/Chia-Network/bls-signatures>.
+
+
+
+Yonezawa, et al.       Expires September 12, 2019              [Page 18]
+
+Internet-Draft           Pairing-Friendly Curves              March 2019
+
 
    [28]       Williams, D., "DFINITY Technology Overview Series
               Consensus System Rev. 1", n.d., <https://dfinity.org/pdf-
@@ -1043,20 +1035,28 @@ Internet-Draft           Pairing-Friendly Curves              March 2019
               Based Cryptography", Progress in Cryptology -- LATINCRYPT
               2015 pp. 245-265, DOI 10.1007/978-3-319-22174-8_14, 2015.
 
-   [34]       Mitsunari, S., "mcl - A portable and fast pairing-based
+   [34]       Rescorla, E., "The Transport Layer Security (TLS) Protocol
+              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
+              <https://www.rfc-editor.org/info/rfc8446>.
+
+   [35]       Mitsunari, S., "mcl - A portable and fast pairing-based
               cryptography library", 2016,
               <https://github.com/herumi/mcl>.
 
-   [35]       Bowe, S., "BLS12-381: New zk-SNARK Elliptic Curve
+   [36]       Bowe, S., "BLS12-381: New zk-SNARK Elliptic Curve
               Construction", <https://blog.z.cash/new-snark-curve/>.
 
-   [36]       ISO/IEC, "ISO/IEC 15946-5:2017", ISO/IEC Information
+   [37]       ISO/IEC, "ISO/IEC 15946-5:2017", ISO/IEC Information
               technology -- Security techniques -- Cryptographic
               techniques based on elliptic curves -- Part 5: Elliptic
               curve generation, 2017.
 
-   [37]       MIRACL Ltd., "MIRACL Cryptographic SDK", 2018,
+   [38]       MIRACL Ltd., "MIRACL Cryptographic SDK", 2018,
               <https://github.com/miracl/MIRACL>.
+
+   [39]       SCIPR Lab, "libsnark: a C++ library for zkSNARK proofs",
+              2012, <https://github.com/zcash/libsnark>.
+
 
 
 
@@ -1066,41 +1066,38 @@ Yonezawa, et al.       Expires September 12, 2019              [Page 19]
 Internet-Draft           Pairing-Friendly Curves              March 2019
 
 
-   [38]       SCIPR Lab, "libsnark: a C++ library for zkSNARK proofs",
-              2012, <https://github.com/zcash/libsnark>.
-
-   [39]       zkcrypto, "zkcrypto - Pairing-friendly elliptic curve
+   [40]       zkcrypto, "zkcrypto - Pairing-friendly elliptic curve
               library", 2017, <https://github.com/zkcrypto/pairing>.
 
-   [40]       Cloudflare, "package bn256", March 2019,
+   [41]       Cloudflare, "package bn256", March 2019,
               <https://godoc.org/github.com/cloudflare/bn256>.
 
-   [41]       Prysmatic Labs, "go-bls - Go wrapper for a BLS12-381
+   [42]       Prysmatic Labs, "go-bls - Go wrapper for a BLS12-381
               Signature Aggregation implementation in C++", 2018,
               <https://godoc.org/github.com/prysmaticlabs/go-bls>.
 
-   [42]       Lynn, B., "PBC Library - The Pairing-Based Cryptography
+   [43]       Lynn, B., "PBC Library - The Pairing-Based Cryptography
               Library", 2006, <https://crypto.stanford.edu/pbc/>.
 
-   [43]       Gouv, C., "RELIC is an Efficient LIbrary for
+   [44]       Gouv, C., "RELIC is an Efficient LIbrary for
               Cryptography", 2013,
               <https://code.google.com/p/relic-toolkit/>.
 
-   [44]       University of Tsukuba, "TEPLA: University of Tsukuba
+   [45]       University of Tsukuba, "TEPLA: University of Tsukuba
               Elliptic Curve and Pairing Library", 2013,
               <http://www.cipher.risk.tsukuba.ac.jp/tepla/index_e.html>.
 
-   [45]       The Apache Software Foundation, "The Apache Milagro
+   [46]       The Apache Software Foundation, "The Apache Milagro
               Cryptographic Library (AMCL)", 2016,
               <https://github.com/apache/incubator-milagro-crypto>.
 
-   [46]       Intel Corporation, "Developer Reference for Intel
+   [47]       Intel Corporation, "Developer Reference for Intel
               Integrated Performance Primitives Cryptography 2019",
               2018, <https://software.intel.com/en-us/ipp-crypto-
               reference-arithmetic-of-the-group-of-elliptic-curve-
               points>.
 
-   [47]       Kyushu University, "bls48 - C++ library for Optimal Ate
+   [48]       Kyushu University, "bls48 - C++ library for Optimal Ate
               Pairing on BLS48", 2017,
               <https://github.com/mk-math-kyushu/bls48>.
 
@@ -1113,6 +1110,9 @@ Appendix A.  Computing Optimal Ate Pairing
    The following algorithm Line_Function shows the computation of the
    line function.  It takes A = (A[1], A[2]), B = (B[1], B[2]) in G_2
    and P = ((P[1], P[2])) in G_1 as input and outputs an element of G_T.
+
+
+
 
 
 
@@ -1199,7 +1199,7 @@ A.2.  Optimal Ate Pairings over Barreto-Lynn-Scott Curves
            end if
        end for
        f := f^{(p^k - 1) / r};
-       retern f;
+       return f;
 
 Appendix B.  Test Vectors of Optimal Ate Pairing
 
