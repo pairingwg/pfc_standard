@@ -2,7 +2,7 @@
 coding: utf-8
 
 title: Pairing-Friendly Curves
-docname: draft-yonezawa-pairing-friendly-curves-01
+docname: draft-yonezawa-pairing-friendly-curves-02
 date: 
 
 ipr: trust200902
@@ -178,7 +178,6 @@ informative:
             month: January
     Pollard78: DOI.10.1090/S0025-5718-1978-0491431-9
     IndexCalculus: DOI.10.1007/978-1-4757-0602-4_1
-    subgroup: DOI.10.1007/978-3-319-22174-8_14
     RFC8446:
     mcl:
         target: https://github.com/herumi/mcl
@@ -194,6 +193,14 @@ informative:
         date:
             year: 2017
             month: March
+    NCCG:
+        target: https://www.nccgroup.trust/us/our-research/zcash-overwinter-consensus-and-sapling-cryptography-review/
+        title: "Zcash Overwinter Consensus and Sapling Cryptography Review"
+        author:
+            org: NCC Group
+        date: 
+            year: 2019
+            month: January
     ISOIEC15946-5:
         title: ISO/IEC 15946-5:2017
         author:
@@ -238,12 +245,12 @@ informative:
             ins: "B. Lynn"
         date: 2006
     relic:
-        target: https://code.google.com/p/relic-toolkit/
+        target: https://github.com/relic-toolkit/relic
         title: RELIC is an Efficient LIbrary for Cryptography
         author:
             ins: "D. F. Aranha"
         author:
-            ins: "C. P. L. Gouv"
+            ins: "C. P. L. Gouvea"
         date: 2013
     TEPLA:
         target: http://www.cipher.risk.tsukuba.ac.jp/tepla/index_e.html
@@ -281,13 +288,13 @@ It describes recommended parameters for each security level and recent implement
 
 ## Pairing-Based Cryptography
 
-Elliptic curve cryptography is one of the important areas in recent cryptography. The cryptographic algorithms based on elliptic curve cryptography, such as ECDSA, is widely used in many applications.
+Elliptic curve cryptography is one of the important areas in recent cryptography. The cryptographic algorithms based on elliptic curve cryptography, such as ECDSA, are widely used in many applications.
 
-Pairing-based cryptography, a variant of elliptic curve cryptography, is attracted the attention for its flexible and applicable functionality.
+Pairing-based cryptography, a variant of elliptic curve cryptography, has attracted the attention for its flexible and applicable functionality.
 Pairing is a special map defined over elliptic curves.
 As the importance of pairing grows, elliptic curves where pairing is efficiently computable are studied and the special curves called pairing-friendly curves are proposed.
 
-Thanks to the characteristics of pairing, it can be applied to construct several cryptographic algorithms and protocols such as identity-based encryption (IBE), attribute-based encryption (ABE), authenticated key exchange (AKE), short signatures and so on. Several applications of pairing-based cryptography is now in practical use.
+Thanks to the characteristics of pairing, it can be applied to construct several cryptographic algorithms and protocols such as identity-based encryption (IBE), attribute-based encryption (ABE), authenticated key exchange (AKE), short signatures and so on. Several applications of pairing-based cryptography are now in practical use.
 
 ## Applications of Pairing-Based Cryptography
 
@@ -333,11 +340,11 @@ The curve defined by the following equation E is called an elliptic curve.
 
        E : y^2 = x^3 + A * x + B,
 
-where A, B are in F\_p and satisfies 4 * A^3 + 27 * B^2 != 0 mod p.
+where A and B are in F\_p and satisfy the discriminant inequality 4 * A^3 + 27 * B^2 != 0 mod p. This equation is called Weierstrass normal form.
 
 Solutions (x, y) for an elliptic curve E, as well as the point at infinity, O\_E, 
 are called F\_p-rational points.
-If P and Q are two points on the curve E, we can define R = P + Q as the opposite point of the intersection between the curve E and the line that intersects P and Q. 
+If P and Q are two points on the curve E, we can define R = P + Q as the opposite point of the intersection between the curve E and the line that passes through P and Q. 
 We can define P + O\_E = P = O\_E + P as well.
 The additive group is constructed by the well-defined operation in the set of F\_p-rational points.
 Similarly, a scalar multiplication S = \[a\]P for a positive integer a can be defined as an a-time addition of P.  
@@ -440,10 +447,6 @@ There would be the case where the attacker solves these reduced problems to brea
 The security level of pairing-friendly curves is estimated by the computational cost of the most efficient algorithm to solve the above discrete logarithm problems. 
 The well-known algorithms for solving the discrete logarithm problems includes Pollard's rho algorithm {{Pollard78}}, Index Calculus {{IndexCalculus}} and so on. 
 In order to make index calculus algorithms more efficient, number field sieve (NFS) algorithms are utilized.
-
-In addition, the special case where the cofactors of G\_1, G\_2 and G\_T are small should be taken care {{subgroup}}.
-In such case, the discrete logarithm problem can be efficiently solved.
-One has to choose parameters so that the cofactors of G\_1, G\_2 and G\_T contain no prime factors smaller than |G\_1|, |G\_2| and |G\_T|.
 
 ## Impact of the Recent Attack {#impact}
 
@@ -557,7 +560,8 @@ For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12
         F_p6 = F_p2[v] / (v^3 - u - 1)
         F_p12 = F_p6[w] / (w^2 - v).
 
-We have to note that, according to {{MSS17}}, the bit length of p for BLS12 to achieve 128 bits of security is calculated as 384 bits and more, which BLS12-381 does not satisfy. Although the computational time is conservatively estimated by 2^110 when exTNFS is applied with index calculus, there is no currently published efficient method for such computational time. They state that BLS12-381 achieves 127-bit security level evaluated by the computational cost of Pollard's rho. Therefore, we regard BN462 as a \"conservative\" parameter, and BLS12-381 as an \"optimistic\" parameter.
+We have to note that, according to {{MSS17}}, the bit length of p for BLS12 to achieve 128 bits of security is calculated as 384 bits and more, which BLS12-381 does not satisfy. They state that BLS12-381 achieves 127-bit security level evaluated by the computational cost of Pollard's rho, whereas NCC group estimated that the security level of BLS12-381 is between 117 and 120 bits at most {{NCCG}}.
+Therefore, we regard BN462 as a \"conservative\" parameter, and BLS12-381 as an \"optimistic\" parameter.
 
 We give the parameters for BLS12-381 as follows.
 
@@ -846,7 +850,7 @@ It takes P in G\_1, Q in G\_2, an integer s, s\_0, ...,s\_L in {-1,0,1} such tha
 
 ## Optimal Ate Pairings over Barreto-Lynn-Scott Curves
 
-Let s = t for a parameter u and s\_0, s\_1, ... , s\_L in {-1,0,1} be a sign-digit representation of s 
+Let s = t for a parameter t and s\_0, s\_1, ... , s\_L in {-1,0,1} be a sign-digit representation of s 
 such that the sum of s\_i * 2^i (i = 0, 1, ..., L) equals to s.
 The following algorithm shows the computation of optimal Ate pairing over Barreto-Lynn-Scott curves.
 It takes P in G\_1, Q in G\_2, a parameter s, s\_0, s\_1, ..., s\_L in {-1,0,1} such that the sum of s\_i \* 2^i (i = 0, 1, ..., L), 
