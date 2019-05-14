@@ -15,7 +15,7 @@ pi:
     toc: yes
     tocdepth: 4
     sortrefs: yes
-    symrefs: no
+    symrefs: yes
     text-list-symbols: -o*+
 
 author:
@@ -42,13 +42,14 @@ author:
 
 normative:
     RFC2119:
-    o-pairing: DOI.10.1109/TIT.2009.2034881
+    RFC8174:
+    Ver09: DOI.10.1109/TIT.2009.2034881
     BN05: DOI.10.1007/11693383_22
     BLS02: DOI.10.1007/3-540-36413-7_19
     KB16: DOI.10.1007/978-3-662-53018-4_20
     BD18: DOI.10.1007/s00145-018-9280-5
     MSS17: DOI.10.1007/978-3-319-61273-7_5
-    Kiy: DOI.10.1007/978-3-319-61204-1_4
+    KIK17: DOI.10.1007/978-3-319-61204-1_4
 
 informative:
     RFC5091:
@@ -118,7 +119,7 @@ informative:
         date:
             year: 2019
             month: March
-    zcash:
+    Zcash:
         target: https://z.cash/technology/zksnarks.html
         title: What are zk-SNARKs?
         author:
@@ -126,7 +127,7 @@ informative:
         date:
             year: 2018
             month: July
-    cloudflare: 
+    Cloudflare: 
         target: https://blog.cloudflare.com/geo-key-manager-how-it-works/
         title: "Geo Key Manager: How It Works"
         author:
@@ -135,7 +136,7 @@ informative:
             year: 2017
             month: September
     I-D.boneh-bls-signature:
-    ethereum:
+    Ethereum:
         target: https://medium.com/prysmatic-labs/ethereum-2-0-development-update-17-prysmatic-labs-ed5bcf82ec00
         title: "Ethereum 2.0 Development Update #17 - Prysmatic Labs"
         author:
@@ -177,7 +178,7 @@ informative:
             year: 2013
             month: January
     Pollard78: DOI.10.1090/S0025-5718-1978-0491431-9
-    IndexCalculus: DOI.10.1007/978-1-4757-0602-4_1
+    HR83: DOI.10.1007/978-1-4757-0602-4_1
     RFC8446:
     mcl:
         target: https://github.com/herumi/mcl
@@ -226,7 +227,7 @@ informative:
         author:
             org: zkcrypto
         date: 2017
-    cloudflare-bn256:
+    Cloudflare-bn256:
         target: https://godoc.org/github.com/cloudflare/bn256
         title: package bn256
         author:
@@ -244,7 +245,7 @@ informative:
         author:
             ins: "B. Lynn"
         date: 2006
-    relic:
+    RELIC:
         target: https://github.com/relic-toolkit/relic
         title: RELIC is an Efficient LIbrary for Cryptography
         author:
@@ -264,13 +265,13 @@ informative:
         author:
             org: The Apache Software Foundation
         date: 2016
-    intel-ipp:
+    Intel-IPP:
         target: https://software.intel.com/en-us/ipp-crypto-reference-arithmetic-of-the-group-of-elliptic-curve-points
         title: Developer Reference for Intel Integrated Performance Primitives Cryptography 2019
         author:
             org: Intel Corporation
         date: 2018
-    bls48:
+    BLS48:
         target: https://github.com/mk-math-kyushu/bls48
         title: "bls48 - C++ library for Optimal Ate Pairing on BLS48"
         author:
@@ -312,13 +313,13 @@ M-Pin protocol includes a kind of zero-knowledge proof, where pairing is used fo
 Trusted Computing Group (TCG) specifies ECDAA (Elliptic Curve Direct Anonymous Attestation) in the specification of Trusted Platform Module (TPM) {{TPM}}. 
 ECDAA is a protocol for proving the attestation held by a TPM to a verifier without revealing the attestation held by that TPM. Pairing is used for constructing ECDAA. FIDO Alliance {{FIDO}} and W3C {{W3C}} also published ECDAA algorithm similar to TCG.
 
-Zcash implements their own zero-knowledge proof algorithm named zk-SNARKs (Zero-Knowledge Succinct Non-Interactive Argument of Knowledge) {{zcash}}. zk-SNARKs is used for protecting privacy of transactions of Zcash. They use pairing for constructing zk-SNARKS.
+Zcash implements their own zero-knowledge proof algorithm named zk-SNARKs (Zero-Knowledge Succinct Non-Interactive Argument of Knowledge) {{Zcash}}. zk-SNARKs is used for protecting privacy of transactions of Zcash. They use pairing for constructing zk-SNARKS.
 
-Cloudflare introduced Geo Key Manager {{cloudflare}} to restrict distribution of customers' private keys to the subset of their data centers. To achieve this functionality, attribute-based encryption is used and pairing takes a role as a building block.
+Cloudflare introduced Geo Key Manager {{Cloudflare}} to restrict distribution of customers' private keys to the subset of their data centers. To achieve this functionality, attribute-based encryption is used and pairing takes a role as a building block.
 
 Recently, Boneh-Lynn-Shacham (BLS) signature schemes are being standardized 
 {{I-D.boneh-bls-signature}} and utilized in several blockchain projects 
-such as Ethereum {{ethereum}}, Algorand {{Algorand}}, Chia Network {{Chia}} and DFINITY {{DFINITY}}. 
+such as Ethereum {{Ethereum}}, Algorand {{Algorand}}, Chia Network {{Chia}} and DFINITY {{DFINITY}}. 
 The threshold functionality and aggregation functionality of BLS signatures are effective for their applications of decentralization and scalability.
 
 ## Goal
@@ -328,8 +329,7 @@ We show how to evaluate the security of pairing-friendly curves and give the par
 
 ## Requirements Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  
-"MAY", and "OPTIONAL" in this document are to be interpreted as described in {{RFC2119}}.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all capitals, as shown here.
 
 # Preliminaries
 
@@ -367,7 +367,7 @@ k:
 ## Pairing {#pairing}
 
 Pairing is a kind of the bilinear map defined over an elliptic curve.
-Examples include Weil pairing, Tate pairing, optimal Ate pairing {{o-pairing}} and so on.
+Examples include Weil pairing, Tate pairing, optimal Ate pairing {{Ver09}} and so on.
 Especially, optimal Ate pairing is considered to be efficient to compute and mainly used for practical implementation.
 
 Let E be an elliptic curve defined over the prime field F\_p.
@@ -421,11 +421,15 @@ Pairing-friendly curves uses some extension fields.
 In order to encode an element of an extension field, 
 we adopt the convention shown in {{IEEE-1363a-2004}}.
 
-For an element s of an extension field of degree d 
-such that s = s\_0 + s\_1 \* i + s\_2 \* i^2 + ... + s\_{d-1} \* i^{d-1} for an indeterminant i, 
+Let F\_p be a finite field of characteristic p and F\_p^d be an extension field of F\_p of degree d.
+For an element s in F
+such that s = s\_0 + s\_1 \* i + s\_2 \* i^2 + ... + s\_{d-1} \* i^{d-1} 
+for an indeterminant i and s\_1, ... , s\_{d-1} in a subfield of the extension field, 
 s is represented by
 
-        s = s_0 + s_1 * p + s_2 * p^2 + ... + s_{d-1} * p^{d-1}.
+        s = s_0 + s_1 * p + s_2 * p^2 + ... + s_{d-1} * p^{d-1},
+
+where p is a characteristic of the subfield.
 
 The parameters and test vectors of extension fields described in this memo 
 are encoded by this convention and represented in octet stream.
@@ -445,7 +449,7 @@ Almost all of these variants are reduced to the hardness of discrete logarithm p
 There would be the case where the attacker solves these reduced problems to break the pairing-based cryptography. Since such attacks have not been discovered yet, we discuss the hardness of the discrete logarithm problems in this memo.
 
 The security level of pairing-friendly curves is estimated by the computational cost of the most efficient algorithm to solve the above discrete logarithm problems. 
-The well-known algorithms for solving the discrete logarithm problems includes Pollard's rho algorithm {{Pollard78}}, Index Calculus {{IndexCalculus}} and so on. 
+The well-known algorithms for solving the discrete logarithm problems includes Pollard's rho algorithm {{Pollard78}}, Index Calculus {{HR83}} and so on. 
 In order to make index calculus algorithms more efficient, number field sieve (NFS) algorithms are utilized.
 
 ## Impact of the Recent Attack {#impact}
@@ -456,7 +460,7 @@ For instance, Barbulescu and Duquesne estimates that the security of the BN curv
 
 Some papers show the minimum bitlength of the parameters of pairing-friendly curves for each security level when applying exTNFS as an attacking method for FFDLP.
 For 128 bits of security, Menezes, Sarkar and Singh estimated the minimum bitlength of p of BN curves after exTNFS as 383 bits, and that of BLS12 curves as 384 bits {{MSS17}}.
-For 256 bits of security, Kiyomura et al. estimated the minimum bitlength of p^k of BLS48 curves as 27,410 bits, which implied 572 bits of p {{Kiy}}.
+For 256 bits of security, Kiyomura et al. estimated the minimum bitlength of p^k of BLS48 curves as 27,410 bits, which implied 572 bits of p {{KIK17}}.
 
 # Security Evaluation of Pairing-Friendly Curves {#secure_params}
 
@@ -469,7 +473,7 @@ and recommend 128 bits and 256 bits of security for secure applications.
 We follow TLS 1.3 {{RFC8446}} which specifies the cipher suites with 128 bits and 256 bits of security as mandatory-to-implement for the choice of the security level.
 
 implementers of the applications have to choose the parameters with appropriate security level according to the security requirements of the applications.
-For efficiency, we refer to the benchmark by mcl {{mcl}} for 128 bits of security, and by Kiyomura et al. {{Kiy}} for 256 bits of security and choose sufficiently efficient parameters.
+For efficiency, we refer to the benchmark by mcl {{mcl}} for 128 bits of security, and by Kiyomura et al. {{KIK17}} for 256 bits of security and choose sufficiently efficient parameters.
 For global acceptance, we give the implementations of pairing-friendly curves in {{impl}}.
 
 
@@ -482,7 +486,7 @@ In case an application does not require higher security level and is sufficient 
 
 ## For 128 Bits of Security
 
-A BN curve with 128 bits of security is shown in {{BD18}}, which we call BN462. BN462 is defined by a parameter t = 2^114 + 2^101 - 2^14 - 1 for the definition in {{BNdef}}. Defined by t, the elliptic curve E and its twisted curve E' are represented by E: y^2 = x^3 + 5 and E': y^2 = x^3 - u + 2, where u is an element of an extension field F\_p^2, respectively. The size of p becomes 462-bit length. 
+A BN curve with 128 bits of security is shown in {{BD18}}, which we call BN462. BN462 is defined by a parameter t = 2^114 + 2^101 - 2^14 - 1 for the definition in {{BNdef}}. 
 
 For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
 
@@ -490,9 +494,23 @@ For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12
         F_p6 = F_p2[v] / (v^3 - u - 2)
         F_p12 = F_p6[w] / (w^2 - v).
 
-As the parameters for BN462, we give a characteristic p, an order r, a base point G = (x, y), 
-a cofactor h of an elliptic curve E: y^2 = x^3 + b, 
-and an order r', a base point G' = (x', y'), a cofactor h' of an elliptic curve E': y^2 = x^3 + b'.
+Defined by t, the elliptic curve E and its twisted curve E' are represented by E: y^2 = x^3 + 5 and E': y^2 = x^3 - u + 2, respectively. The size of p becomes 462-bit length. 
+
+We give the following parameters for BN462.
+
+- A group defined over E: y^2 = x^3 + b
+    - p : a characteristic
+    - r : an order
+    - G = (x, y) : a base point
+    - h : a cofactor
+    - b : a coefficient of E
+- A group defined over E': y^2 = x^3 + b'
+    - r' : an order
+    - G' = (x', y') : a base point
+        - x' = x'1 * u + x'2 (x'1, x'2 in F\_p)
+        - y' = y'1 * u + y'2 (y'1, y'2 in F\_p)
+    - h' : a cofactor
+    - b' : a coefficient of E'
 
 p:
 : 0x2404 80360120 023fffff fffff6ff 0cf6b7d9 bfca0000 000000d8 
@@ -617,7 +635,7 @@ As shown in {{impact}}, it is unrealistic to achieve 256 bits of security by BN 
 since the minimum size of p becomes too large to implement.
 Hence, we consider BLS48 for 256 bits of security.
 
-A BLS48 curve with 256 bits of security is shown in {{Kiy}}, which we call BLS48-581. 
+A BLS48 curve with 256 bits of security is shown in {{KIK17}}, which we call BLS48-581. 
 It is defined by a parameter t = -1 + 2^7 - 2^10 - 2^30 - 2^32 
 and the elliptic curve E and its twisted curve E' are represented by E: y^2 = x^3 + 1 
 and E': y^2 = x^3 - 1 / w, 
@@ -754,14 +772,14 @@ Zcash implemented a BN curve (named BN128) in their library libsnark {{libsnark}
 After exTNFS, they propose a new parameter of BLS12 as BLS12-381 {{BLS12-381}}
 and publish its experimental implementation {{zkcrypto}}.
 
-Cloudflare implements a 256-bit BN curve (bn256) {{cloudflare-bn256}}.
+Cloudflare implements a 256-bit BN curve (bn256) {{Cloudflare-bn256}}.
 There is no action so far after exTNFS.
 
-Ethereum 2.0 adopts BLS12-381 (BLS12\_381), BN curves with 254 bits of p (CurveFp254BNb) and 382 bits of p (CurveFp382\_1 and CurveFp382\_2) {{go-bls}}. Their implementation calls mcl {{mcl}} for pairing computation. Chia Network publishs their implementation {{Chia}} by integrating the RELIC toolkit {{relic}}.
+Ethereum 2.0 adopts BLS12-381 (BLS12\_381), BN curves with 254 bits of p (CurveFp254BNb) and 382 bits of p (CurveFp382\_1 and CurveFp382\_2) {{go-bls}}. Their implementation calls mcl {{mcl}} for pairing computation. Chia Network publishs their implementation {{Chia}} by integrating the RELIC toolkit {{RELIC}}.
 
 <!-- libraries -->
 
-Cryptographic libraries which implement pairings include PBC {{PBC}}, mcl {{mcl}}, RELIC {{relic}}, TEPLA {{TEPLA}}, AMCL {{AMCL}}, Intel IPP {{intel-ipp}} and a library by Kyushu University {{bls48}}.
+Cryptographic libraries which implement pairings include PBC {{PBC}}, mcl {{mcl}}, RELIC {{RELIC}}, TEPLA {{TEPLA}}, AMCL {{AMCL}}, Intel IPP {{Intel-IPP}} and a library by Kyushu University {{BLS48}}.
 
 {{adoption}} shows the adoption of pairing-friendly curves in existing standards, applications and libraries.
 In this table, the curves marked as (\*) indicate that there is no research result on the security evaluation, 
