@@ -481,8 +481,10 @@ For global acceptance, we give the implementations of pairing-friendly curves in
 
 Before exTNFS, BN curves with 256-bit size of underlying finite field (so-called BN256) were considered to have 128 bits of security. After exTNFS, however, the security level of BN curves with 256-bit size of underlying finite field fell into 100 bits.
 
-implementers who will newly develop the applications of pairing-based cryptography SHOULD NOT use BN256 as a pairing-friendly curve when their applications require 128 bits of security.
-In case an application does not require higher security level and is sufficient to have 100 bits of security (i.e. Internet of Things), implementers MAY use BN256.
+Implementers who will newly develop the applications of pairing-based cryptography SHOULD NOT use pairing-friendly curve with 100 bits of security (i.e. BN256).
+
+There exists applications which already implemented pairing-based cryptography with 100-bit secure pairing-friendly curves.
+In such a case, implementers MAY use 100 bits of security only if they need to keep interoperability with the existing applications.
 
 ## For 128 Bits of Security
 
