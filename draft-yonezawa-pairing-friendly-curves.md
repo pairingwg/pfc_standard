@@ -346,23 +346,26 @@ This is called Weierstrass normal form of an elliptic curve.
 
 Solutions (x, y) for an elliptic curve E, as well as the point at infinity, O\_E, 
 are called F\_q-rational points.
-If P and Q are two points on the curve E, we can define R = P + Q as the opposite point of the intersection between the curve E and the line that passes through P and Q. 
+If P and Q are two points on the curve E, we can define R = P + Q as the opposite point of the intersection between the curve E and the line that passes through P and Q.  
 We can define P + O\_E = P = O\_E + P as well.
-Similarly, a scalar multiplication S = \[a\]P for a positive integer a can be defined as an a-time addition of P.
+Similarly, we can define 2P = P + P and a scalar multiplication S = \[a\]P for a positive integer a can be defined as an a-time addition of P.
 
-The additive group, denoted by E(F\_q), is constructed by the set of F\_q-rational points and the additive law described above.
-We can define the cyclic additive group with a prime order r by taking a base point BP and this group is used for the elliptic curve cryptography.
+The additive group, denoted by E(F\_q), is constructed by the set of F\_q-rational points and the addition law described above.
+We can define the cyclic additive group with a prime order r by taking a base point BP in E(F\_q) as a generator. This group is used for the elliptic curve cryptography.
 
 We define terminology used in this memo as follows.
 
 O\_E: 
 : the point at infinity over an elliptic curve E.
 
+E(F\_q):
+: a group constructed by F\_q-rational points of E.
+
 \#E(F\_q): 
 : the number of F\_q-rational points of E.
 
 h: 
-: a cofactor such that h =  \#E(F\_p)/r.
+: a cofactor such that h =  \#E(F\_p) / r.
 
 k: 
 : an embedding degree, a minimum integer such that r is a divisor of q^k - 1.
@@ -373,8 +376,10 @@ Pairing is a kind of the bilinear map defined over two elliptic curves E and E'.
 Examples include Weil pairing, Tate pairing, optimal Ate pairing {{Ver09}} and so on.
 Especially, optimal Ate pairing is considered to be efficient to compute and mainly used for practical implementation.
 
-Let E be an elliptic curve defined over the prime field F\_p.
-Let G\_1 be a cyclic subgroup of E(F\_p) with order r, and G\_2 be a cyclic subgroup of E'(F\_p) with order r.
+Let E be an elliptic curve defined over a prime field F\_p.
+Let G\_1 be a cyclic subgroup of E(F\_p) with order r, 
+and G\_2 be a cyclic subgroup of E'(F\_p) with order r.
+<!-- Is E'(F\_p) correct ? -->
 Let G\_T be an order r subgroup of a multiplicative group F\_pk^\*, where k is an embedded degree.
 
 Pairing is defined as a bilinear map e: (G\_1, G\_2) -> G\_T
@@ -390,8 +395,8 @@ satisfying the following properties:
 A BN curve {{BN05}} is one of the instantiations of pairing-friendly curves proposed in 2005. A pairing over BN curves constructs optimal Ate pairings.
 
 A BN curve is defined by elliptic curves E and E' parameterized by some well chosen integer t.
-E is defined over F\_p, where p is more than or equal to 5, and E(F\_p) has a subgroup of order r.
-The characteristic p and the order r are prime numbers parameterized by
+E is defined over F\_p, where p is a prime more than or equal to 5, and E(F\_p) has a subgroup of prime order r.
+The characteristic p and the order r are parameterized by
 
         p = 36 * t^4 + 36 * t^3 + 24 * t^2 + 6 * t + 1
         r = 36 * t^4 + 36 * t^3 + 18 * t^2 + 6 * t + 1
@@ -411,7 +416,8 @@ A pairing e is defined by taking G\_1 as a subgroup of E(F\_p) of order r, G\_2 
 A BLS curve {{BLS02}} is another instantiations of pairings proposed in 2002. Similar to BN curves, a pairing over BLS curves constructs optimal Ate pairings.
 
 A BLS curve is elliptic curves E and E' parameterized by some well chosen integer t.
-E is defined over a finite field F\_p by an equation of the form E: y^2 = x^3 + b and its twisted curve of order 6 E': y^2 = x^3 + b' defined in the same way as BN curves. 
+E is defined over a finite field F\_p by an equation of the form E: y^2 = x^3 + b,
+and its twisted curve of order 6, E': y^2 = x^3 + b', is defined in the same way as BN curves. 
 In contrast to BN curves, E(F\_p) does not have a prime order.
 Instead, its order is divisible by a large parameterized prime r and denoted by h * r with cofactor h.
 The pairing will be defined on the r-torsions points.
@@ -489,8 +495,8 @@ We note that 100 bits of security is no longer secure
 and recommend 128 bits and 256 bits of security for secure applications.
 We follow TLS 1.3 {{RFC8446}} which specifies the cipher suites with 128 bits and 256 bits of security as mandatory-to-implement for the choice of the security level.
 
-implementers of the applications have to choose the parameters with appropriate security level according to the security requirements of the applications.
-For efficiency, we refer to the benchmark by mcl {{mcl}} for 128 bits of security, and by Kiyomura et al. {{KIK17}} for 256 bits of security and choose sufficiently efficient parameters.
+Implementers of the applications have to choose the parameters with appropriate security level according to the security requirements of the applications.
+For efficiency, we refer to the benchmark by mcl {{mcl}} for 128 bits of security, and by Kiyomura et al. {{KIK17}} for 256 bits of security, and then choose sufficiently efficient parameters.
 For global acceptance, we give the implementations of pairing-friendly curves in {{impl}}.
 
 
@@ -507,7 +513,12 @@ In such a case, implementers MAY use 100 bits of security only if they need to k
 
 ### BN Curves
 
-A BN curve with 128 bits of security is shown in {{BD18}}, which we call BN462. BN462 is defined by a parameter t = 2^114 + 2^101 - 2^14 - 1 for the definition in {{BNdef}}. 
+A BN curve with 128 bits of security is shown in {{BD18}}, which we call BN462. 
+BN462 is defined by a parameter 
+
+        t = 2^114 + 2^101 - 2^14 - 1 
+
+for the definition in {{BNdef}}. 
 
 For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
 
@@ -528,8 +539,8 @@ We give the following parameters for BN462.
 - G\_2 defined over E': y^2 = x^3 + b'
     - r' : an order
     - BP' = (x', y') : a base point
-        - x' = x'1 * u + x'2 (x'1, x'2 in F\_p)
-        - y' = y'1 * u + y'2 (y'1, y'2 in F\_p)
+        - x' = x'0 + x'1 * u (x'0, x'1 in F\_p)
+        - y' = y'0 + y'1 * u (y'0, y'1 in F\_p)
     - h' : a cofactor
     - b' : a coefficient of E'
 
@@ -564,17 +575,25 @@ r':
   12908ee1 c201f7ff fffffff6 ff66fc7b f717f7c0 00000000 2401b007 
   e010800d
 
-x'1:
-: 0x1D2E4343E8599102AF8EDCA849566BA3C98E2A354730CBED9176884058B18134DD86BAE555B783718F50AF8B59BF7E850E9B73108BA6AA8CD283
+x'0:
+: 0x0257 ccc85b58 dda0dfb3 8e3a8cbd c5482e03 37e7c1cd 96ed61c9 
+  13820408 208f9ad2 699bad92 e0032ae1 f0aa6a8b 48807695 468e3d93 
+  4ae1e4df 
 
-x'2:
-: 0x0257CCC85B58DDA0DFB38E3A8CBDC5482E0337E7C1CD96ED61C913820408208F9AD2699BAD92E0032AE1F0AA6A8B48807695468E3D934AE1E4DF
+x'1:
+: 0x1d2e 4343e859 9102af8e dca84956 6ba3c98e 2a354730 cbed9176 
+  884058b1 8134dd86 bae555b7 83718f50 af8b59bf 7e850e9b 73108ba6 
+  aa8cd283
+
+y'0:
+: 0x0a06 50439da2 2c197951 7427a208 09eca035 634706e2 3c3fa7a6 
+  bb42fe81 0f1399a1 f41c9dda e32e0369 5a140e7b 11d7c337 6e5b68df 
+  0db7154e
 
 y'1:
-: 0x073EF0CBD438CBE0172C8AE37306324D44D5E6B0C69AC57B393F1AB370FD725CC647692444A04EF87387AA68D53743493B9EBA14CC552CA2A93A
-
-y'2:
-: 0x0A0650439DA22C1979517427A20809ECA035634706E23C3FA7A6BB42FE810F1399A1F41C9DDAE32E03695A140E7B11D7C3376E5B68DF0DB7154E
+: 0x073e f0cbd438 cbe0172c 8ae37306 324d44d5 e6b0c69a c57b393f 
+  1ab370fd 725cc647 692444a0 4ef87387 aa68d537 43493b9e ba14cc55 
+  2ca2a93a
 
 x' (encoded with {{IEEE-1363a-2004}}):
 : 0x041b04cb e3413297 c49d8129 7eed0759 47d86135 c4abf0be 9d5b64be 
@@ -601,7 +620,10 @@ b':
 ### BLS Curves
 
 A BLS12 curve with 128 bits of security shown in {{BLS12-381}}, BLS12-381, 
-is defined by a parameter t = -2^63 - 2^62 - 2^60 - 2^57 - 2^48 - 2^16 
+is defined by a parameter 
+
+        t = -2^63 - 2^62 - 2^60 - 2^57 - 2^48 - 2^16 
+
 and the size of p becomes 381-bit length. 
 
 For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
@@ -613,7 +635,7 @@ For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12
 Defined by t, the elliptic curve E and its twisted curve E' are represented 
 by E: y^2 = x^3 + 4 and E': y^2 = x^3 + 4(u + 1).
 
-A pairing e is defined by taking G\_1 as a cyclic group of order r generated by a base point BP = (x, y) in F\_p, G\_2 as a cyclic group of order ? generated by a based point BP' = (x', y') in F\_p2, and G\_T as a subgroup of a multiplicative group F\_p12^* of order ?. BLS12-381 is M-type.
+A pairing e is defined by taking G\_1 as a cyclic group of order r generated by a base point BP = (x, y) in F\_p, G\_2 as a cyclic group of order r generated by a based point BP' = (x', y') in F\_p2, and G\_T as a subgroup of a multiplicative group F\_p12^* of order r. BLS12-381 is M-type.
 
 We have to note that, according to {{MSS17}}, the bit length of p for BLS12 to achieve 128 bits of security is calculated as 384 bits and more, which BLS12-381 does not satisfy. They state that BLS12-381 achieves 127-bit security level evaluated by the computational cost of Pollard's rho, whereas NCC group estimated that the security level of BLS12-381 is between 117 and 120 bits at most {{NCCG}}.
 Therefore, we regard BN462 as a \"conservative\" parameter, and BLS12-381 as an \"optimistic\" parameter.
@@ -629,8 +651,8 @@ We give the following parameters for BLS12-381.
 - G\_2 defined over E': y^2 = x^3 + b'
     - r' : an order
     - BP' = (x', y') : a base point
-        - x' = x'1 * u + x'2 (x'1, x'2 in F\_p)
-        - y' = y'1 * u + y'2 (y'1, y'2 in F\_p)
+        - x' = x'0 + x'1 * u (x'0, x'1 in F\_p)
+        - y' = y'0 + y'1 * u (y'0, y'1 in F\_p)
     - h' : a cofactor
     - b' : a coefficient of E'
 
@@ -660,17 +682,21 @@ r':
 : 0x1a0111ea 397fe69a 4b1ba7b6 434bacd7 64774b84 f38512bf 6730d2a0 
   f6b0f624 1eabfffe b153ffff b9feffff ffffaaab
 
-x'1:
-: 0x13E02B6052719F607DACD3A088274F65596BD0D09920B61AB5DA61BBDC7F5049334CF11213945D57E5AC7D055D042B7E
+x'0:
+: 0x24aa2b2 f08f0a91 26080527 2dc51051 c6e47ad4 fa403b02 
+  b4510b64 7ae3d177 0bac0326 a805bbef d48056c8 c121bdb8
 
-x'2:
-: 0x24AA2B2F08F0A91260805272DC51051C6E47AD4FA403B02B4510B647AE3D1770BAC0326A805BBEFD48056C8C121BDB8
+x'1:
+: 0x13e02b60 52719f60 7dacd3a0 88274f65 596bd0d0 9920b61a 
+  b5da61bb dc7f5049 334cf112 13945d57 e5ac7d05 5d042b7e
+
+y'0:
+: 0xce5d527 727d6e11 8cc9cdc6 da2e351a adfd9baa 8cbdd3a7 
+  6d429a69 5160d12c 923ac9cc 3baca289 e1935486 08b82801
 
 y'1:
-: 0x606C4A02EA734CC32ACD2B02BC28B99CB3E287E85A763AF267492AB572E99AB3F370D275CEC1DA1AAA9075FF05F79BE
-
-y'2:
-: 0xCE5D527727D6E118CC9CDC6DA2E351AADFD9BAA8CBDD3A76D429A695160D12C923AC9CC3BACA289E193548608B82801
+: 0x606c4a0 2ea734cc 32acd2b0 2bc28b99 cb3e287e 85a763af 
+  267492ab 572e99ab 3f370d27 5cec1da1 aaa9075f f05f79be
 
 x' (encoded with {{IEEE-1363a-2004}}):
 : 0x204d9ac 05ffbfeb ac60c8f3 e4143831 567c7063 d38b0595 9c12ec06 
@@ -699,7 +725,9 @@ since the minimum size of p becomes too large to implement.
 Hence, we consider BLS48 for 256 bits of security.
 
 A BLS48 curve with 256 bits of security is shown in {{KIK17}}, which we call BLS48-581. 
-It is defined by a parameter t = -1 + 2^7 - 2^10 - 2^30 - 2^32. 
+It is defined by a parameter 
+
+        t = -1 + 2^7 - 2^10 - 2^30 - 2^32. 
 
 For the finite field F\_p, the towers of extension field F\_p2, F\_p4, F\_p8, F\_p24 and F\_p48 are defined by indeterminants u, v, w, z, s as follows:
 
@@ -711,7 +739,7 @@ For the finite field F\_p, the towers of extension field F\_p2, F\_p4, F\_p8, F\
 
 The elliptic curve E and its twisted curve E' are represented by E: y^2 = x^3 + 1 
 and E': y^2 = x^3 - 1 / w.
-A pairing e is defined by taking G\_1 as a cyclic group of order r generated by a base point BP = (x, y) in F_p, G\_2 as a cyclic group of order ? generated by a based point BP' = (x', y') in F_p8, and G\_T as a subgroup of a multiplicative group F\_p48^* of order ?.
+A pairing e is defined by taking G\_1 as a cyclic group of order r generated by a base point BP = (x, y) in F_p, G\_2 as a cyclic group of order r generated by a based point BP' = (x', y') in F_p8, and G\_T as a subgroup of a multiplicative group F\_p48^* of order r.
 The size of p becomes 581-bit length. BLS48-581 is D-type.
 
 We then give the parameters for BLS48-581 as follows.
@@ -762,10 +790,56 @@ r':
   18a5fe6f cd671c01
 
 x':
-: (0x827D5C22FB2BDEC5282624C4F4AAA2B1E5D7A9DEFAF47B5211CF741719728A7F9F8CFCA93F29CFF364A7190B7E2B0D4585479BD6AEBF9FC44E56AF2FC9E97C3F84E19DA00FBC6AE34\*u + 0xB9B7951C6061EE3F0197A498908AEE660DEA41B39D13852B6DB908BA2C0B7A449CEF11F293B13CED0FD0CAA5EFCF3432AAD1CBE4324C22D63334B5B0E205C3354E41607E60750E057)\*v + (0xC96C7797EB0738603F1311E4ECDA088F7B8F35DCEF0977A3D1A58677BB037418181DF63835D28997EB57B40B9C0B15DD7595A9F177612F097FC7960910FCE3370F2004D914A3C093A\*u + 0x38B91C600B35913A3C598E4CAA9DD63007C675D0B1642B5675FF0E7C5805386699981F9E48199D5AC10B2EF492AE589274FAD55FC1889AA80C65B5F746C9D4CBB739C3A1C53F8CCE5))\*s + (0xBE2218C25CEB6185C78D8012954D4BFE8F5985AC62F3E5821B7B92A393F8BE0CC218A95F63E1C776E6EC143B1B279B9468C31C5257C200CA52310B8CB4E80BC3F09A7033CBB7FEAFE\*u + 0x1FCCC70198F1334E1B2EA1853AD83BC73A8A6CA9AE237CA7A6D6957CCBAB5AB6860161C1DBD19242FFAE766F0D2A6D55F028CBDFBB879D5FEA8EF4CDED6B3F0B46488156CA55A3E6A)\*v + 0x7C4973ECE2258512069B0E86ABC07E8B22BB6D980E1623E9526F6DA12307F4E1C3943A00ABFEDF16214A76AFFA62504F0C3C7630D979630FFD75556A01AFA143F1669B36676B47C57\*u + 0x5D615D9A7871E4A38237FA45A2775DEBABBEFC70344DBCCB7DE64DB3A2EF156C46FF79BAAD1A8C42281A63CA0612F400503004D80491F510317B79766322154DEC34FD0B4ACE8BFAB
+: 0x5 d615d9a7 871e4a38 237fa45a 2775deba bbefc703 44dbccb7 
+  de64db3a 2ef156c4 6ff79baa d1a8c422 81a63ca0 612f4005 03004d80 
+  491f5103 17b79766 322154de c34fd0b4 ace8bfab + 
+  0x7 c4973ece 22585120 69b0e86a bc07e8b2 2bb6d980 e1623e95 
+  26f6da12 307f4e1c 3943a00a bfedf162 14a76aff a62504f0 c3c7630d 
+  979630ff d75556a0 1afa143f 1669b366 76b47c57 \* u + 
+  0x1 fccc7019 8f1334e1 b2ea1853 ad83bc73 a8a6ca9a e237ca7a 
+  6d6957cc bab5ab68 60161c1d bd19242f fae766f0 d2a6d55f 028cbdfb 
+  b879d5fe a8ef4cde d6b3f0b4 6488156c a55a3e6a \* v + 
+  0xb e2218c25 ceb6185c 78d80129 54d4bfe8 f5985ac6 2f3e5821 
+  b7b92a39 3f8be0cc 218a95f6 3e1c776e 6ec143b1 b279b946 8c31c525 
+  7c200ca5 2310b8cb 4e80bc3f 09a7033c bb7feafe \* u \* v + 
+  0x3 8b91c600 b35913a3 c598e4ca a9dd6300 7c675d0b 1642b567 
+  5ff0e7c5 80538669 9981f9e4 8199d5ac 10b2ef49 2ae58927 4fad55fc 
+  1889aa80 c65b5f74 6c9d4cbb 739c3a1c 53f8cce5 \* w + 
+  0xc 96c7797e b0738603 f1311e4e cda088f7 b8f35dce f0977a3d 
+  1a58677b b0374181 81df6383 5d28997e b57b40b9 c0b15dd7 595a9f17 
+  7612f097 fc796091 0fce3370 f2004d91 4a3c093a \* u \* w + 
+  0xb 9b7951c6 061ee3f0 197a4989 08aee660 dea41b39 d13852b6 
+  db908ba2 c0b7a449 cef11f29 3b13ced0 fd0caa5e fcf3432a ad1cbe43 
+  24c22d63 334b5b0e 205c3354 e41607e6 0750e057 \* v \* w + 
+  0x8 27d5c22f b2bdec52 82624c4f 4aaa2b1e 5d7a9def af47b521 
+  1cf74171 9728a7f9 f8cfca93 f29cff36 4a7190b7 e2b0d458 5479bd6a 
+  ebf9fc44 e56af2fc 9e97c3f8 4e19da00 fbc6ae34 \* u \* v \* w
 
 y':
-: (0x35E2524FF89029D393A5C07E84F981B5E068F1406BE8E50C87549B6EF8ECA9A9533A3F8E69C31E97E1AD0333EC719205417300D8C4AB33F748E5AC66E84069C55D667FFCB732718B6\*u + 0x896767811BE65EA25C2D05DFDD17AF8A006F364FC0841B064155F14E4C819A6DF98F425AE3A2864F22C1FAB8C74B2618B5BB40FA639F53DCCC9E884017D9AA62B3D41FAEAFEB23986)\*v + (0x7D0D03745736B7A513D339D5AD537B90421AD66EB16722B589D82E2055AB7504FA83420E8C270841F6824F47C180D139E3AAFC198CAA72B679DA59ED8226CF3A594EEDC58CF90BEE4\*u + 0xD209D5A223A9C46916503FA5A88325A2554DC541B43DD93B5A959805F1129857ED85C77FA238CDCE8A1E2CA4E512B64F59F430135945D137B08857FDDDFCF7A43F47831F982E50137))\*s + (0xAEC25A4621EDC0688223FBBD478762B1C2CDED3360DCEE23DD8B0E710E122D2742C89B224333FA40DCED2817742770BA10D67BDA503EE5E578FB3D8B8A1E5337316213DA92841589D\*u + 0xB36A201DD008523E421EFB70367669EF2C2FC5030216D5B119D3A480D370514475F7D5C99D0E90411515536CA3295E5E2F0C1D35D51A652269CBC7C46FC3B8FDE68332A526A2A8474)\*v + 0x284DC75979E0FF144DA6531815FCADC2B75A422BA325E6FBA01D72964732FCBF3AFB096B243B1F192C5C3D1892AB24E1DD212FA097D760E2E588B423525FFC7B111471DB936CD5665\*u + 0x0EB53356C375B5DFA497216452F3024B918B4238059A577E6F3B39EBFC435FAAB0906235AFA27748D90F7336D8AE5163C1599ABF77EEA6D659045012AB12C0FF323EDD3FE4D2D7971
+: 0x0 eb53356c 375b5dfa 49721645 2f3024b9 18b42380 59a577e6 
+  f3b39ebf c435faab 0906235a fa27748d 90f7336d 8ae5163c 1599abf7 
+  7eea6d65 9045012a b12c0ff3 23edd3fe 4d2d7971 + 
+  0x2 84dc7597 9e0ff144 da653181 5fcadc2b 75a422ba 325e6fba 
+  01d72964 732fcbf3 afb096b2 43b1f192 c5c3d189 2ab24e1d d212fa09 
+  7d760e2e 588b4235 25ffc7b1 11471db9 36cd5665 \* u + 
+  0xb 36a201dd 008523e4 21efb703 67669ef2 c2fc5030 216d5b11 
+  9d3a480d 37051447 5f7d5c99 d0e90411 515536ca 3295e5e2 f0c1d35d 
+  51a65226 9cbc7c46 fc3b8fde 68332a52 6a2a8474 \* v + 
+  0xa ec25a462 1edc0688 223fbbd4 78762b1c 2cded336 0dcee23d 
+  d8b0e710 e122d274 2c89b224 333fa40d ced28177 42770ba1 0d67bda5 
+  03ee5e57 8fb3d8b8 a1e53373 16213da9 2841589d \* u \* v + 
+  0xd 209d5a22 3a9c4691 6503fa5a 88325a25 54dc541b 43dd93b5 
+  a959805f 1129857e d85c77fa 238cdce8 a1e2ca4e 512b64f5 9f430135 
+  945d137b 08857fdd dfcf7a43 f47831f9 82e50137 \* w + 
+  0x7 d0d03745 736b7a51 3d339d5a d537b904 21ad66eb 16722b58 
+  9d82e205 5ab7504f a83420e8 c270841f 6824f47c 180d139e 3aafc198 
+  caa72b67 9da59ed8 226cf3a5 94eedc58 cf90bee4 \* u \* w + 
+  0x8 96767811 be65ea25 c2d05dfd d17af8a0 06f364fc 0841b064 
+  155f14e4 c819a6df 98f425ae 3a2864f2 2c1fab8c 74b2618b 5bb40fa6 
+  39f53dcc c9e88401 7d9aa62b 3d41faea feb23986 \* v \* w + 
+  0x3 5e2524ff 89029d39 3a5c07e8 4f981b5e 068f1406 be8e50c8 
+  7549b6ef 8eca9a95 33a3f8e6 9c31e97e 1ad0333e c7192054 17300d8c 
+  4ab33f74 8e5ac66e 84069c55 d667ffcb 732718b6 \* u \* v \* w
 
 x' (encoded with {{IEEE-1363a-2004}}):
 : 0x01 690ae060 61530e31 64040ce6 e7466974 a0865edb 6d5b825d f11e5db6
@@ -898,6 +972,7 @@ This document has no actions for IANA.
 # Acknowledgements
 
 The authors would like to thank Akihiro Kato for his significant contribution to the early version of this memo.
+The authors would also like to acknowledge Hoeteck Wee, Sergey Gorbunov and Michael Scott for their valuable comments.
 
 <!-- # Change log -->
 
