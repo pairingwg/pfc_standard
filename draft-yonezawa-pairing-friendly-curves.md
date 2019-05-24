@@ -390,7 +390,7 @@ satisfying the following properties:
 A BN curve {{BN05}} is one of the instantiations of pairing-friendly curves proposed in 2005. A pairing over BN curves constructs optimal Ate pairings.
 
 A BN curve is defined by elliptic curves E and E' parameterized by some well chosen integer t.
-E is defined over F\_p, where p is more than or equal to 5, and E(F\p) has a subgroup of order r.
+E is defined over F\_p, where p is more than or equal to 5, and E(F\_p) has a subgroup of order r.
 The characteristic p and the order r are prime numbers parameterized by
 
         p = 36 * t^4 + 36 * t^3 + 24 * t^2 + 6 * t + 1
@@ -412,8 +412,9 @@ A BLS curve {{BLS02}} is another instantiations of pairings proposed in 2002. Si
 
 A BLS curve is elliptic curves E and E' parameterized by some well chosen integer t.
 E is defined over a finite field F\_p by an equation of the form E: y^2 = x^3 + b and its twisted curve of order 6 E': y^2 = x^3 + b' defined in the same way as BN curves. 
-In contrast to BN curves, a cyclic subgroup defined over BLS curves does not have a prime order.
-Instead, its order is divisible by a large parameterized prime r and the pairing will be defined on the r-torsions points.
+In contrast to BN curves, E(F\_p) does not have a prime order.
+Instead, its order is divisible by a large parameterized prime r and denoted by h * r with cofactor h.
+The pairing will be defined on the r-torsions points.
 
 BLS curves vary according to different embedding degrees. In this memo, we deal with BLS12 and BLS48 families with embedding degrees 12 and 48 with respect to r, respectively.
 
