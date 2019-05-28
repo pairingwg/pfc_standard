@@ -365,7 +365,7 @@ E(F\_q):
 : the number of F\_q-rational points of E.
 
 h: 
-: a cofactor such that h =  \#E(F\_p) / r.
+: a cofactor such that h =  \#E(F\_q) / r.
 
 k: 
 : an embedding degree, a minimum integer such that r is a divisor of q^k - 1.
@@ -376,10 +376,9 @@ Pairing is a kind of the bilinear map defined over two elliptic curves E and E'.
 Examples include Weil pairing, Tate pairing, optimal Ate pairing {{Ver09}} and so on.
 Especially, optimal Ate pairing is considered to be efficient to compute and mainly used for practical implementation.
 
-Let E be an elliptic curve defined over a prime field F\_p.
-Let G\_1 be a cyclic subgroup of E(F\_p) with order r, 
-and G\_2 be a cyclic subgroup of E'(F\_p) with order r.
-<!-- Is E'(F\_p) correct ? -->
+Let E be an elliptic curve defined over a prime field F\_p and E' be an elliptic curve defined over an entension field.
+Let G\_1 be a cyclic subgroup on the elliptic curve E with order r, 
+and G\_2 be a cyclic subgroup on the elliptic curve E' with order r.
 Let G\_T be an order r subgroup of a multiplicative group F\_pk^\*, where k is an embedded degree.
 
 Pairing is defined as a bilinear map e: (G\_1, G\_2) -> G\_T
