@@ -313,6 +313,8 @@ M-Pin protocol includes a kind of zero-knowledge proof, where pairing is used fo
 Trusted Computing Group (TCG) specifies ECDAA (Elliptic Curve Direct Anonymous Attestation) in the specification of Trusted Platform Module (TPM) {{TPM}}. 
 ECDAA is a protocol for proving the attestation held by a TPM to a verifier without revealing the attestation held by that TPM. Pairing is used for constructing ECDAA. FIDO Alliance {{FIDO}} and W3C {{W3C}} also published ECDAA algorithm similar to TCG.
 
+<!-- Intel SGX EPID -->
+
 Zcash implements their own zero-knowledge proof algorithm named zk-SNARKs (Zero-Knowledge Succinct Non-Interactive Argument of Knowledge) {{Zcash}}. zk-SNARKs is used for protecting privacy of transactions of Zcash. They use pairing for constructing zk-SNARKS.
 
 Cloudflare introduced Geo Key Manager {{Cloudflare}} to restrict distribution of customers' private keys to the subset of their data centers. To achieve this functionality, attribute-based encryption is used and pairing takes a role as a building block.
@@ -320,7 +322,7 @@ Cloudflare introduced Geo Key Manager {{Cloudflare}} to restrict distribution of
 Recently, Boneh-Lynn-Shacham (BLS) signature schemes are being standardized 
 {{I-D.boneh-bls-signature}} and utilized in several blockchain projects 
 such as Ethereum {{Ethereum}}, Algorand {{Algorand}}, Chia Network {{Chia}} and DFINITY {{DFINITY}}. 
-The threshold functionality and aggregation functionality of BLS signatures are effective for their applications of decentralization and scalability.
+The aggregation functionality of BLS signatures are effective for their applications of decentralization and scalability.
 
 ## Goal
 
@@ -489,9 +491,9 @@ For 256 bits of security, Kiyomura et al. estimated the minimum bitlength of p^k
 We give security evaluation for pairing-friendly curves based on the evaluating method presented in {{security_pfc}}. We also introduce secure parameters of pairing-friendly curves for each security level.
 The parameters introduced here are chosen with the consideration of security, efficiency and global acceptance.
 
-For security, we introduce 100 bits, 128 bits and 256 bits of security.
+For security, we introduce 100 bits, 128 bits, 192 bits and 256 bits of security.
 We note that 100 bits of security is no longer secure
-and recommend 128 bits and 256 bits of security for secure applications.
+and recommend 128 bits, 192 bits and 256 bits of security for secure applications.
 We follow TLS 1.3 {{RFC8446}} which specifies the cipher suites with 128 bits and 256 bits of security as mandatory-to-implement for the choice of the security level.
 
 Implementers of the applications have to choose the parameters with appropriate security level according to the security requirements of the applications.
@@ -716,6 +718,10 @@ h':
 
 b':
 : 4 \* (u + 1)
+
+## For 192 Bits of Security
+
+(TBD)
 
 ## For 256 Bits of Security
 
@@ -942,22 +948,22 @@ Cryptographic libraries which implement pairings include PBC {{PBC}}, mcl {{mcl}
 In this table, the curves marked as (\*) indicate that there is no research result on the security evaluation, 
 but that the implementers states that they hold 128 bits of security.
 
-| Category | Name | 100 bit | 128 bit | 256 bit |
-| standards | ISO/IEC 15946-5 | BN256 | BN384 | |
-| | TCG | BN256 | | |
-| | FIDO/W3C | BN256 | | |
-| applications | MIRACL | BN254 | BLS12 | |
-| | Zcash | BN128 (CurveSNARK) | BLS12-381 | |
-| | Cloudflare | BN256 | | |
-| | Ethereum | BN254 | BN382 (\*) / BLS12-381 (\*)  | |
-| | Chia Network | | BLS12-381 (\*)  | |
-| libraries | PBC | BN | | |
-| | mcl | BN254 / BN_SNARK1 | BN381_1 (\*) / BN462 / BLS12-381 | |
-| | RELIC | BN254 / BN256 | BLS12-381 / BLS12-455 | |
-| | TEPLA | BN254 | | |
-| | AMCL | BN254 / BN256 | BLS12-381 (\*) / BLS12-383 (\*) / BLS12-461 | BLS48 |
-| | Intel IPP  | BN256 | | |
-| | Kyushu Univ. | | | BLS48 |
+| Category | Name | 100 bit | 128 bit | 192 bit | 256 bit | 
+| standards | ISO/IEC 15946-5 | BN256 | BN384 | | |
+| | TCG | BN256 | | | | 
+| | FIDO/W3C | BN256 | | | | 
+| applications | MIRACL | BN254 | BLS12 | | | 
+| | Zcash | BN128 (CurveSNARK) | BLS12-381 | | | 
+| | Cloudflare | BN256 | | | | 
+| | Ethereum | BN254 | BN382 (\*) / BLS12-381 (\*)  | | | 
+| | Chia Network | | BLS12-381 (\*)  | | | 
+| libraries | PBC | BN | | | | 
+| | mcl | BN254 / BN_SNARK1 | BN381_1 (\*) / BN462 / BLS12-381 | | | 
+| | RELIC | BN254 / BN256 | BLS12-381 / BLS12-455 | | | 
+| | TEPLA | BN254 | | | | 
+| | AMCL | BN254 / BN256 | BLS12-381 (\*) / BLS12-383 (\*) / BLS12-461 | | BLS48 | 
+| | Intel IPP  | BN256 | | | | 
+| | Kyushu Univ. | | | | BLS48 | 
 {: #adoption title="Adoption of Pairing-Friendly Curves"} 
 
 # Security Considerations
