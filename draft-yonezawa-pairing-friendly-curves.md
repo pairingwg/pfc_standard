@@ -119,6 +119,14 @@ informative:
         date:
             year: 2019
             month: March
+    EPID:
+        target: https://software.intel.com/en-us/download/intel-sgx-intel-epid-provisioning-and-attestation-services
+        title: "Intel (R) SGX: Intel (R) EPID Provisioning and Attestation Services"
+        author:
+            org: Intel Corporation
+        date:
+            year: 2016
+    BL10: DOI.10.1109/SocialCom.2010.118
     Zcash:
         target: https://z.cash/technology/zksnarks.html
         title: What are zk-SNARKs?
@@ -187,7 +195,7 @@ informative:
             ins: "S. Mitsunari"
         date: 2016
     BLS12-381:
-        target: https://blog.z.cash/new-snark-curve/
+        target: https://electriccoin.co/blog/new-snark-curve/
         title: "BLS12-381: New zk-SNARK Elliptic Curve Construction"
         author:
             ins: "S. Bowe"
@@ -227,12 +235,12 @@ informative:
         author:
             org: zkcrypto
         date: 2017
-    Cloudflare-bn256:
-        target: https://godoc.org/github.com/cloudflare/bn256
-        title: package bn256
+    CIRCL:
+        target: https://github.com/cloudflare/circl
+        title: "CIRCL: Cloudflare Interoperable, Reusable Cryptographic Library"
         author:
             org: Cloudflare
-        date: ""
+        date: 2019
     go-bls:
         target: https://godoc.org/github.com/prysmaticlabs/go-bls
         title: "go-bls - Go wrapper for a BLS12-381 Signature Aggregation implementation in C++"
@@ -289,19 +297,19 @@ It describes recommended parameters for each security level and recent implement
 
 ## Pairing-Based Cryptography
 
-Elliptic curve cryptography is one of the important areas in recent cryptography. The cryptographic algorithms based on elliptic curve cryptography, such as ECDSA, are widely used in many applications.
+Elliptic curve cryptography is one of the important areas in recent cryptography. The cryptographic algorithms based on elliptic curve cryptography, such as ECDSA (Elliptic Curve Digital Signature Algorithm), are widely used in many applications.
 
 Pairing-based cryptography, a variant of elliptic curve cryptography, has attracted the attention for its flexible and applicable functionality.
 Pairing is a special map defined over elliptic curves.
-As the importance of pairing grows, elliptic curves where pairing is efficiently computable are studied and the special curves called pairing-friendly curves are proposed.
-
 Thanks to the characteristics of pairing, it can be applied to construct several cryptographic algorithms and protocols such as identity-based encryption (IBE), attribute-based encryption (ABE), authenticated key exchange (AKE), short signatures and so on. Several applications of pairing-based cryptography are now in practical use.
+
+As the importance of pairing grows, elliptic curves where pairing is efficiently computable are studied and the special curves called pairing-friendly curves are proposed.
 
 ## Applications of Pairing-Based Cryptography
 
 Several applications using pairing-based cryptography are standardized and implemented. We show example applications available in the real world.
 
-IETF issues RFCs for pairing-based cryptography such as identity-based cryptography {{RFC5091}}, Sakai-Kasahara Key Encryption (SAKKE) {{RFC6508}}, and Identity-Based Authenticated Key Exchange (IBAKE) {{RFC6539}}. 
+IETF publishes RFCs for pairing-based cryptography such as Identity-Based Cryptography {{RFC5091}}, Sakai-Kasahara Key Encryption (SAKKE) {{RFC6508}}, and Identity-Based Authenticated Key Exchange (IBAKE) {{RFC6539}}. 
 SAKKE is applied to Multimedia Internet KEYing (MIKEY) {{RFC6509}} and used in 3GPP {{SAKKE}}.
 
 Pairing-based key agreement protocols are standardized in ISO/IEC {{ISOIEC11770-3}}.
@@ -315,19 +323,21 @@ ECDAA is a protocol for proving the attestation held by a TPM to a verifier with
 
 <!-- Intel SGX EPID -->
 
+Intel introduces Intel Enhanced Privacy ID (EPID) which enables remote attestation of a hardware device while preserving the privacy of the device as a functionality of Intel Software Guard Extensions (SGX) {{EPID}}. They extend TPM ECDAA to realize such functionality. A pairing-based EPID has been proposed {{BL10}} and distributed along with Intel SGX applications.
+
 Zcash implements their own zero-knowledge proof algorithm named zk-SNARKs (Zero-Knowledge Succinct Non-Interactive Argument of Knowledge) {{Zcash}}. zk-SNARKs is used for protecting privacy of transactions of Zcash. They use pairing for constructing zk-SNARKS.
 
-Cloudflare introduced Geo Key Manager {{Cloudflare}} to restrict distribution of customers' private keys to the subset of their data centers. To achieve this functionality, attribute-based encryption is used and pairing takes a role as a building block.
+Cloudflare introduces Geo Key Manager {{Cloudflare}} to restrict distribution of customers' private keys to the subset of their data centers. To achieve this functionality, attribute-based encryption is used and pairing takes a role as a building block.
 
 Recently, Boneh-Lynn-Shacham (BLS) signature schemes are being standardized 
 {{I-D.boneh-bls-signature}} and utilized in several blockchain projects 
 such as Ethereum {{Ethereum}}, Algorand {{Algorand}}, Chia Network {{Chia}} and DFINITY {{DFINITY}}. 
-The aggregation functionality of BLS signatures are effective for their applications of decentralization and scalability.
+The aggregation functionality of BLS signatures is effective for their applications of decentralization and scalability.
 
 ## Goal
 
 The goal of this memo is to consider the security of pairing-friendly curves used in pairing-based cryptography and introduce secure parameters of pairing-frindly curves. Specifically, we explain the recent attack against pairing-friendly curves and how much the security of the curves is reduced.
-We show how to evaluate the security of pairing-friendly curves and give the parameters for 100 bits of security, which is no longer secure, 128 and 256 bits of security.
+We show how to evaluate the security of pairing-friendly curves and give the parameters for 100 bits of security, which is no longer secure, 128, 192 and 256 bits of security.
 
 ## Requirements Terminology
 
@@ -378,10 +388,10 @@ Pairing is a kind of the bilinear map defined over two elliptic curves E and E'.
 Examples include Weil pairing, Tate pairing, optimal Ate pairing {{Ver09}} and so on.
 Especially, optimal Ate pairing is considered to be efficient to compute and mainly used for practical implementation.
 
-Let E be an elliptic curve defined over a prime field F\_p and E' be an elliptic curve defined over an entension field.
+Let E be an elliptic curve defined over a prime field F\_p and E' be an elliptic curve defined over an extension field of F\_p.
 Let G\_1 be a cyclic subgroup on the elliptic curve E with order r, 
 and G\_2 be a cyclic subgroup on the elliptic curve E' with order r.
-Let G\_T be an order r subgroup of a multiplicative group F\_pk^\*, where k is an embedded degree.
+Let G\_T be an order r subgroup of a multiplicative group F\_pk^\*, where k is an embedded degree of E.
 
 Pairing is defined as a bilinear map e: (G\_1, G\_2) -> G\_T
 satisfying the following properties:
@@ -395,7 +405,7 @@ satisfying the following properties:
 
 A BN curve {{BN05}} is one of the instantiations of pairing-friendly curves proposed in 2005. A pairing over BN curves constructs optimal Ate pairings.
 
-A BN curve is defined by elliptic curves E and E' parameterized by some well chosen integer t.
+A BN curve is defined by elliptic curves E and E' parameterized by a well chosen integer t.
 E is defined over F\_p, where p is a prime more than or equal to 5, and E(F\_p) has a subgroup of prime order r.
 The characteristic p and the order r are parameterized by
 
@@ -406,7 +416,7 @@ for an integer t.
 
 The elliptic curve E has an equation of the form E: y^2 = x^3 + b, where b is an element of multiplicative group of order p.
 
-BN curves always have order 6 twists. If m is an element which is neither a square nor a cube in a finite field F\_p2, the twisted curve E' of E is defined over a finite field F\_p2 by the equation E': y^2 = x^3 + b' with b' = b / m or b' = b \* m. 
+BN curves always have order 6 twists. If m is an element which is neither a square nor a cube in an extension field F\_p2, the twisted curve E' of E is defined over an extension field F\_p2 by the equation E': y^2 = x^3 + b' with b' = b / m or b' = b \* m. 
 BN curves are called D-type if b' = b / m, and M-type if b' = b \* m.
 The embedded degree k is 12.
 
@@ -416,9 +426,9 @@ A pairing e is defined by taking G\_1 as a subgroup of E(F\_p) of order r, G\_2 
 
 A BLS curve {{BLS02}} is another instantiations of pairings proposed in 2002. Similar to BN curves, a pairing over BLS curves constructs optimal Ate pairings.
 
-A BLS curve is elliptic curves E and E' parameterized by some well chosen integer t.
+A BLS curve is elliptic curves E and E' parameterized by a well chosen integer t.
 E is defined over a finite field F\_p by an equation of the form E: y^2 = x^3 + b,
-and its twisted curve of order 6, E': y^2 = x^3 + b', is defined in the same way as BN curves. 
+and its twisted curve, E': y^2 = x^3 + b', is defined in the same way as BN curves. 
 In contrast to BN curves, E(F\_p) does not have a prime order.
 Instead, its order is divisible by a large parameterized prime r and denoted by h * r with cofactor h.
 The pairing will be defined on the r-torsions points.
@@ -435,7 +445,7 @@ In BLS curves, parameterized p and r are given by the following equations:
            p = (t - 1)^2 * (t^16 - t^8 + 1) / 3 + t
            r = t^16 - t^8 + 1
 
-for some well chosen integer t.
+for a well chosen integer t.
 
 A pairing e is defined by taking G\_1 as a subgroup of E(F\_p) of order r, G\_2 as an order r subgroup of E'(F\_p2) for BLS12 and of E'(F\_p8) for BLS48, and G\_T as an order r subgroup of a multiplicative group F\_p12^\* for BLS12 and of a multiplicative group F\_p48^\* for BLS48.
 
@@ -448,7 +458,7 @@ we adopt the convention shown in {{IEEE-1363a-2004}}.
 Let F\_p be a finite field of characteristic p and F\_p^d be an extension field of F\_p of degree d.
 For an element s in F
 such that s = s\_0 + s\_1 \* i + s\_2 \* i^2 + ... + s\_{d-1} \* i^{d-1} 
-for an indeterminant i and s\_1, ... , s\_{d-1} in a subfield of the extension field, 
+for an indeterminate i and s\_1, ... , s\_{d-1} in a subfield of the extension field, 
 s is represented by
 
         s = s_0 + s_1 * p + s_2 * p^2 + ... + s_{d-1} * p^{d-1},
@@ -467,31 +477,31 @@ The security of pairing-friendly curves is evaluated by the hardness of the foll
 - The elliptic curve discrete logarithm problem (ECDLP) in G\_1 and G\_2
 - The finite field discrete logarithm problem (FFDLP) in G\_T
 
-There are other hard problems over pairing-friendly curves, which are used for proving the security of pairing-based cryptography. Such problems include computational bilinear Diffie-Hellman (CBDH) problem or bilinear Diffie-Hellman (BDH) Problem, decision bilinear Diffie-Hellman (DBDH) problem, gap DBDH problem, etc {{ECRYPT}}.
+There are other hard problems over pairing-friendly curves used for proving the security of pairing-based cryptography. Such problems include computational bilinear Diffie-Hellman (CBDH) problem and bilinear Diffie-Hellman (BDH) Problem, decision bilinear Diffie-Hellman (DBDH) problem, gap DBDH problem, etc {{ECRYPT}}.
 Almost all of these variants are reduced to the hardness of discrete logarithm problems described above and believed to be easier than the discrete logarithm problems.
 
-There would be the case where the attacker solves these reduced problems to break the pairing-based cryptography. Since such attacks have not been discovered yet, we discuss the hardness of the discrete logarithm problems in this memo.
+There would be the case where the attacker solves these reduced problems to break pairing-based cryptography. Since such attacks have not been discovered yet, we discuss the hardness of the discrete logarithm problems in this memo.
 
 The security level of pairing-friendly curves is estimated by the computational cost of the most efficient algorithm to solve the above discrete logarithm problems. 
-The well-known algorithms for solving the discrete logarithm problems includes Pollard's rho algorithm {{Pollard78}}, Index Calculus {{HR83}} and so on. 
+The well-known algorithms for solving the discrete logarithm problems include Pollard's rho algorithm {{Pollard78}}, Index Calculus {{HR83}} and so on. 
 In order to make index calculus algorithms more efficient, number field sieve (NFS) algorithms are utilized.
 
 ## Impact of the Recent Attack {#impact}
 
-In 2016, Kim and Barbulescu proposed a new variant of the NFS algorithms, the extended number field sieve (exTNFS), which drastically reduces the complexity of solving FFDLP {{KB16}}.
+In 2016, Kim and Barbulescu proposed a new variant of the NFS algorithms, the extended tower number field sieve (exTNFS), which drastically reduces the complexity of solving FFDLP {{KB16}}.
 Due to exTNFS, the security level of pairing-friendly curves asymptotically dropped down.
-For instance, Barbulescu and Duquesne estimates that the security of the BN curves which was believed to provide 128 bits of security (BN256, for example) dropped down to approximately 100 bits {{BD18}}.
+For instance, Barbulescu and Duquesne estimated that the security of the BN curves which had been believed to provide 128 bits of security (BN256, for example) dropped down to approximately 100 bits {{BD18}}.
 
-Some papers show the minimum bitlength of the parameters of pairing-friendly curves for each security level when applying exTNFS as an attacking method for FFDLP.
-For 128 bits of security, Menezes, Sarkar and Singh estimated the minimum bitlength of p of BN curves after exTNFS as 383 bits, and that of BLS12 curves as 384 bits {{MSS17}}.
-For 256 bits of security, Kiyomura et al. estimated the minimum bitlength of p^k of BLS48 curves as 27,410 bits, which implied 572 bits of p {{KIK17}}.
+Some papers showed the minimum bit length of the parameters of pairing-friendly curves for each security level when applying exTNFS as an attacking method for FFDLP.
+For 128 bits of security, Menezes, Sarkar and Singh estimated the minimum bit length of p of BN curves after exTNFS as 383 bits, and that of BLS12 curves as 384 bits {{MSS17}}.
+For 256 bits of security, Kiyomura et al. estimated the minimum bit length of p^k of BLS48 curves as 27,410 bits, which implied 572 bits of p {{KIK17}}.
 
 # Security Evaluation of Pairing-Friendly Curves {#secure_params}
 
 We give security evaluation for pairing-friendly curves based on the evaluating method presented in {{security_pfc}}. We also introduce secure parameters of pairing-friendly curves for each security level.
 The parameters introduced here are chosen with the consideration of security, efficiency and global acceptance.
 
-For security, we introduce 100 bits, 128 bits, 192 bits and 256 bits of security.
+For security, we introduce the parameters with 100 bits, 128 bits, 192 bits and 256 bits of security.
 We note that 100 bits of security is no longer secure
 and recommend 128 bits, 192 bits and 256 bits of security for secure applications.
 We follow TLS 1.3 {{RFC8446}} which specifies the cipher suites with 128 bits and 256 bits of security as mandatory-to-implement for the choice of the security level.
@@ -503,9 +513,9 @@ For global acceptance, we give the implementations of pairing-friendly curves in
 
 ## For 100 Bits of Security
 
-Before exTNFS, BN curves with 256-bit size of underlying finite field (so-called BN256) were considered to have 128 bits of security. After exTNFS, however, the security level of BN curves with 256-bit size of underlying finite field fell into 100 bits.
+Before exTNFS, BN curves with 256-bit size of underlying finite field (so-called BN256) were considered to achieve 128 bits of security. After exTNFS, however, the security level of BN curves with 256-bit size of underlying finite field fell into 100 bits.
 
-Implementers who will newly develop the applications of pairing-based cryptography SHOULD NOT use pairing-friendly curve with 100 bits of security (i.e. BN256).
+Implementers who will newly develop the applications of pairing-based cryptography SHOULD NOT use pairing-friendly curves with 100 bits of security (i.e. BN256).
 
 There exists applications which already implemented pairing-based cryptography with 100-bit secure pairing-friendly curves.
 In such a case, implementers MAY use 100 bits of security only if they need to keep interoperability with the existing applications.
@@ -521,7 +531,7 @@ BN462 is defined by a parameter
 
 for the definition in {{BNdef}}. 
 
-For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
+For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminates u, v, w as follows:
 
         F_p2 = F_p[u] / (u^2 + 1)
         F_p6 = F_p2[v] / (v^3 - u - 2)
@@ -627,7 +637,7 @@ is defined by a parameter
 
 and the size of p becomes 381-bit length. 
 
-For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminants u, v, w as follows:
+For the finite field F\_p, the towers of extension field F\_p2, F\_p6 and F\_p12 are defined by indeterminates u, v, w as follows:
 
         F_p2 = F_p[u] / (u^2 + 1)
         F_p6 = F_p2[v] / (v^3 - u - 1)
@@ -734,7 +744,7 @@ It is defined by a parameter
 
         t = -1 + 2^7 - 2^10 - 2^30 - 2^32. 
 
-For the finite field F\_p, the towers of extension field F\_p2, F\_p4, F\_p8, F\_p24 and F\_p48 are defined by indeterminants u, v, w, z, s as follows:
+For the finite field F\_p, the towers of extension field F\_p2, F\_p4, F\_p8, F\_p24 and F\_p48 are defined by indeterminates u, v, w, z, s as follows:
 
         F_p2 = F_p[u] / (u^2 + 1)
         F_p4 = F_p2[v] / (v^2 + u + 1)
@@ -918,57 +928,55 @@ b':
 
 # Implementations of Pairing-Friendly Curves {#impl}
 
-We show the pairing-friendly curves selected by existing standards, applications and cryptographic libraries.
+We show the pairing-friendly curves selected by existing standards, cryptographic libraries and applications.
 
 <!-- standards -->
 
 ISO/IEC 15946-5 {{ISOIEC15946-5}} shows examples of BN curves with the size of 160, 192, 224, 256, 384 and 512 bits of p. There is no action so far after the proposal of exTNFS.
 
-TCG adopts an BN curve of 256 bits specified in ISO/IEC 15946-5 (TPM\_ECC\_BN\_P256) and of 638 bits specified by their own (TPM\_ECC\_BN\_P638).
-FIDO Alliance {{FIDO}} and W3C {{W3C}} adopt the BN curves specified in TCG, a 512-bit BN curve shown in ISO/IEC 15946-5 and another 256-bit BN curve.
-
-<!-- applications -->
-
-MIRACL {{MIRACL}} implements BN curves and BLS12 curves.
-
-Zcash implemented a BN curve (named BN128) in their library libsnark {{libsnark}}.
-After exTNFS, they propose a new parameter of BLS12 as BLS12-381 {{BLS12-381}}
-and publish its experimental implementation {{zkcrypto}}.
-
-Cloudflare implements a 256-bit BN curve (bn256) {{Cloudflare-bn256}}.
-There is no action so far after exTNFS.
-
-Ethereum 2.0 adopts BLS12-381 (BLS12\_381), BN curves with 254 bits of p (CurveFp254BNb) and 382 bits of p (CurveFp382\_1 and CurveFp382\_2) {{go-bls}}. Their implementation calls mcl {{mcl}} for pairing computation. Chia Network publishs their implementation {{Chia}} by integrating the RELIC toolkit {{RELIC}}.
+TCG adopts an BN curve of 256 bits specified in ISO/IEC 15946-5 (TPM\_ECC\_BN\_P256) and that of 638 bits specified by their own (TPM\_ECC\_BN\_P638).
+FIDO Alliance {{FIDO}} and W3C {{W3C}} adopt the same BN curves as TCG, a 512-bit BN curve shown in ISO/IEC 15946-5 and another 256-bit BN curve.
 
 <!-- libraries -->
 
 Cryptographic libraries which implement pairings include PBC {{PBC}}, mcl {{mcl}}, RELIC {{RELIC}}, TEPLA {{TEPLA}}, AMCL {{AMCL}}, Intel IPP {{Intel-IPP}} and a library by Kyushu University {{BLS48}}.
 
-{{adoption}} shows the adoption of pairing-friendly curves in existing standards, applications and libraries.
-In this table, the curves marked as (\*) indicate that there is no research result on the security evaluation, 
-but that the implementers states that they hold 128 bits of security.
+Cloudflare published a new cryptographic library CIRCL (Cloudflare Interoperable, Reusable Cryptographic Library) in 2019 {{CIRCL}}. The plan for the implementation of secure pairing-friendly curves is stated in their roadmap.
 
-| Category | Name | 100 bit | 128 bit | 192 bit | 256 bit | 
-| standards | ISO/IEC 15946-5 | BN256 | BN384 | | |
-| | TCG | BN256 | | | | 
-| | FIDO/W3C | BN256 | | | | 
-| applications | MIRACL | BN254 | BLS12 | | | 
-| | Zcash | BN128 (CurveSNARK) | BLS12-381 | | | 
-| | Cloudflare | BN256 | | | | 
-| | Ethereum | BN254 | BN382 (\*) / BLS12-381 (\*)  | | | 
-| | Chia Network | | BLS12-381 (\*)  | | | 
-| libraries | PBC | BN | | | | 
-| | mcl | BN254 / BN_SNARK1 | BN381_1 (\*) / BN462 / BLS12-381 | | | 
-| | RELIC | BN254 / BN256 | BLS12-381 / BLS12-455 | | | 
-| | TEPLA | BN254 | | | | 
-| | AMCL | BN254 / BN256 | BLS12-381 (\*) / BLS12-383 (\*) / BLS12-461 | | BLS48 | 
-| | Intel IPP  | BN256 | | | | 
-| | Kyushu Univ. | | | | BLS48 | 
+<!-- applications -->
+
+MIRACL implements BN curves and BLS12 curves {{MIRACL}}.
+
+Zcash implements a BN curve (named BN128) in their library libsnark {{libsnark}}.
+After exTNFS, they propose a new parameter of BLS12 as BLS12-381 {{BLS12-381}}
+and publish its experimental implementation {{zkcrypto}}.
+
+Ethereum 2.0 adopts BLS12-381 (BLS12\_381), BN curves with 254 bits of p (CurveFp254BNb) and 382 bits of p (CurveFp382\_1 and CurveFp382\_2) {{go-bls}}. Their implementation calls mcl {{mcl}} for pairing computation. Chia Network publishs their implementation {{Chia}} by integrating the RELIC toolkit {{RELIC}}.
+
+{{adoption}} shows the adoption of pairing-friendly curves in existing standards, cryptographic libraries and applications.
+In this table, the curves marked as (\*) indicate that the security level is evaluated less than the one labeld in the table.
+
+| Name | 100 bit | 128 bit | 192 bit | 256 bit | 
+| ISO/IEC 15946-5 | BN256 | BN384 | | |
+| TCG | BN256 | | | | 
+| FIDO/W3C | BN256 | | | | 
+| PBC | BN | | | | 
+| mcl | BN254 / BN_SNARK1 | BN381_1 (\*) / BN462 / BLS12-381 | | | 
+| RELIC | BN254 / BN256 | BLS12-381 / BLS12-455 | | | 
+| TEPLA | BN254 | | | | 
+| AMCL | BN254 / BN256 | BLS12-381 (\*) / BLS12-383 (\*) / BLS12-461 | | BLS48 | 
+| Intel IPP  | BN256 | | | | 
+| Kyushu Univ. | | | | BLS48 | 
+| CIRCL | - | - | - | - |
+| MIRACL | BN254 | BLS12 | | | 
+| Zcash | BN128 (CurveSNARK) | BLS12-381 | | | 
+| Ethereum | BN254 | BN382 (\*) / BLS12-381 (\*)  | | | 
+| Chia Network | | BLS12-381 (\*)  | | | 
 {: #adoption title="Adoption of Pairing-Friendly Curves"} 
 
 # Security Considerations
 
-This memo entirely describes the security of pairing-friendly curves, and introduces secure parameters of pairing-friendly curves. We give these parameters in terms of security, efficiency and global acceptance. The parameters for 100, 128 and 256 bits of security are introduced since the security level will different in the requirements of the pairing-based applications.
+This memo entirely describes the security of pairing-friendly curves, and introduces secure parameters of pairing-friendly curves. We give these parameters in terms of security, efficiency and global acceptance. The parameters for 100, 128, 192 and 256 bits of security are introduced since the security level will different in the requirements of the pairing-based applications. Implementers can select these parameters according to their security requirements.
 
 # IANA Considerations
 
@@ -1002,7 +1010,7 @@ and P = ((P\[1\], P\[2\])) in G\_1 as input and outputs an element of G\_T.
         end if;
         return (l * (P[1] -A[1]) + A[2] -P[2]);
 
-When implementing the line function, implementer should consider the isomorphism of E and its twisted curve E' so that one can reduce the computational cost of operations in G\_2. We note that the function Line\_function does not consider such isomorphism.
+When implementing the line function, implementers should consider the isomorphism of E and its twisted curve E' so that one can reduce the computational cost of operations in G\_2. We note that the function Line\_function does not consider such isomorphism.
 
 Computation of optimal Ate pairing for BN curves uses Frobenius map.
 Let a Frobenius map pi for a point Q = (x, y) over E' be pi(p, Q) = (x^p, y^p).
@@ -1032,8 +1040,7 @@ It takes P in G\_1, Q in G\_2, an integer s, s\_0, ...,s\_L in {-1,0,1} such tha
 
 ## Optimal Ate Pairings over Barreto-Lynn-Scott Curves
 
-Let s = t for a parameter t and s\_0, s\_1, ... , s\_L in {-1,0,1} be a sign-digit representation of s 
-such that the sum of s\_i * 2^i (i = 0, 1, ..., L) equals to s.
+Let s = t for a parameter t and s\_0, s\_1, ... , s\_L in {-1,0,1} such that the sum of s\_i * 2^i (i = 0, 1, ..., L) equals to s.
 The following algorithm shows the computation of optimal Ate pairing over Barreto-Lynn-Scott curves.
 It takes P in G\_1, Q in G\_2, a parameter s, s\_0, s\_1, ..., s\_L in {-1,0,1} such that the sum of s\_i \* 2^i (i = 0, 1, ..., L), 
 and an order r as input, and outputs e(P, Q).
@@ -1061,7 +1068,7 @@ For BN462 and BLS12-381, Q = (x', y') is given by
         x' = x'0 + x'1 * u and
         y' = y'0 + y'1 * u,
     
-where u is a indeterminant and x'0, x'1, y'0, y'1 are elements of F\_p.
+where u is a indeterminate and x'0, x'1, y'0, y'1 are elements of F\_p.
 
 For BLS48-581, Q = (x', y') is given by
 
@@ -1070,7 +1077,7 @@ For BLS48-581, Q = (x', y') is given by
         y' = y'0 + y'1 * u + y'2 * v + y'3 * u * v 
             + y'4 * w + y'5 * u * w + y'6 * v * w + y'7 * u * v * w,
 
-where u, v and w are indeterminants and x'0, ..., x'7 and y'0, ..., y'7 are elements of F\_p.
+where u, v and w are indeterminates and x'0, ..., x'7 and y'0, ..., y'7 are elements of F\_p.
 The representation of Q = (x', y') given below is followed by {{IEEE-1363a-2004}}.
 
 BN462:
