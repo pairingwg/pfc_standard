@@ -331,7 +331,7 @@ The aggregation functionality of BLS signatures is effective for their applicati
 
 ## Goal
 
-The goal of this memo is to consider the security of pairing-friendly curves used in pairing-based cryptography and introduce secure parameters of pairing-frindly curves. Specifically, we explain the recent attack against pairing-friendly curves and how much the security of the curves is reduced.
+The goal of this memo is to consider the security of pairing-friendly curves used in pairing-based cryptography and introduce secure parameters of pairing-friendly curves. Specifically, we explain the recent attack against pairing-friendly curves and how much the security of the curves is reduced.
 We show how to evaluate the security of pairing-friendly curves and give the parameters for 100 bits of security, which is no longer secure, 128, 192 and 256 bits of security.
 
 ## Requirements Terminology
@@ -986,7 +986,6 @@ In this table, the curves marked as (\*) indicate that the security level is eva
 | AMCL | BN254 / BN256 | BLS12-381 (\*) / BLS12-383 (\*) / BLS12-461 | | BLS48 | 
 | Intel IPP  | BN256 | | | | 
 | Kyushu Univ. | | | | BLS48 | 
-| CIRCL | - | - | - | - |
 | MIRACL | BN254 | BLS12 | | | 
 | Zcash | BN128 (CurveSNARK) | BLS12-381 | | | 
 | Ethereum | BN254 | BN382 (\*) / BLS12-381 (\*)  | | | 
