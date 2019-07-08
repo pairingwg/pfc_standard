@@ -461,9 +461,9 @@ for s'\_0, s'\_1, ... , s'\_{d' / d - 1} in a basefield F\_p^d,
 s' is represented as integer by 
 
         int(s') = int(s'_0) + int(s'_1) * p^{d' / d} + 
-                    ... + int(s'_{d' - 1}) * p^{d' / d * (d' - 1)},
+                    ... + int(s'_{d' / d - 1}) * p^{d' / d * (d' - 1)},
 
-where int(s'\_0), ... , int(s'\_{d' - 1}) are integers encoded by above convention.
+where int(s'\_0), ... , int(s'\_{d' / d - 1}) are integers encoded by above convention.
 
 In general, one can define encoding between integer and an element of any finite field tower by inductively applying the above convention.
 
