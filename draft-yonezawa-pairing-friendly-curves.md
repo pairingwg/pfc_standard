@@ -451,7 +451,30 @@ A pairing e is defined by taking G\_1 as a subgroup of E(F\_p) of order r, G\_2 
 
 ## Representation Convention for an Extension Field
 
-Pairing-friendly curves uses some extension fields. 
+Pairing-friendly curves use a tower of some extension fields. 
+In order to encode an element of an extension field, we adopt the representation convention shown in {{IEEE-1363a-2004}}.
+
+Let F\_p be a finite field of characteristic p and F\_p^d\[i\] be an extension field of F\_p of degree d and an indeterminate i. 
+For an element s in F\_p^d such that s = s\_0 + s\_1 \* p + ... +  s\_{d-1} \* i^{d-1} for s\_0, s\_1, ... , s\_{d-1} in a basefield F\_p, 
+s is represented as integer by
+
+        int(s) = s_0 + s_1 * p + ... +  s_{d-1} * p^{d-1}.
+
+Let F\_p^d'\[j\] be an extension field of F\_p^d of degree d' and an indeterminate j.
+For an element s' in F\_p^d' such that s' = s'\_0 + s'\_1 \* j + ... +  s'\_{d'-1} \* j^{d'-1} for s'\_0, s'\_1, ... , s'\_{d'-1} in a basefield F\_p^d, 
+s' is represented as integer by 
+
+        int(s') = int(s'_0) + int(s'_1) * p + 
+                    ... + int(s'_{d'-1}) * p^{d'-1},
+
+where int(s'\_0), ... , int(s'\_{d-1}) are integers encoded by above convention.
+
+In general, one can define encoding between integer and an element of any finite field tower by inductively applying the above convention.
+
+The parameters and test vectors of extension fields described in this memo are encoded by this convention and represented in octet stream.
+
+
+<!-- Pairing-friendly curves uses some extension fields. 
 In order to encode an element of an extension field, 
 we adopt the convention shown in {{IEEE-1363a-2004}}.
 
@@ -466,7 +489,7 @@ s is represented by
 where p is a characteristic of the subfield.
 
 The parameters and test vectors of extension fields described in this memo 
-are encoded by this convention and represented in octet stream.
+are encoded by this convention and represented in octet stream. -->
 
 # Security of Pairing-Friendly Curves {#security_pfc}
 
