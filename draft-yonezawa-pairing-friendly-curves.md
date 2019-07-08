@@ -25,11 +25,6 @@ author:
         org: Lepidum
         email: yonezawa@lepidum.co.jp
     -
-        ins: S. Chikara
-        name: Sakae Chikara
-        org: NTT TechnoCross
-        email: chikara.sakae@po.ntt-tx.co.jp
-    -
         ins: T. Kobayashi
         name: Tetsutaro Kobayashi
         org: NTT
@@ -1008,7 +1003,7 @@ This document has no actions for IANA.
 # Acknowledgements
 
 The authors would like to thank Akihiro Kato for his significant contribution to the early version of this memo.
-The authors would also like to acknowledge Hoeteck Wee, Sergey Gorbunov and Michael Scott for their valuable comments.
+The authors would also like to acknowledge Sakae Chikara, Hoeteck Wee, Sergey Gorbunov and Michael Scott for their valuable comments.
 
 <!-- # Change log -->
 
